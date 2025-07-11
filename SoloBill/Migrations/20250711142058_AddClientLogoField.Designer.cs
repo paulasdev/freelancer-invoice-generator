@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoloBill.Data;
 
@@ -11,9 +12,11 @@ using SoloBill.Data;
 namespace SoloBill.Migrations
 {
     [DbContext(typeof(SoloBillDbContext))]
-    partial class SoloBillDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250711142058_AddClientLogoField")]
+    partial class AddClientLogoField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;    
 
 namespace SoloBill.Controllers
 {
     public class ClientsController : Controller
     {
         private readonly SoloBillDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ClientsController(SoloBillDbContext context)
+        public ClientsController(SoloBillDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+           _webHostEnvironment = webHostEnvironment; //save files to wwwroot/uploads
         }
 
         // GET: Clients
@@ -53,10 +57,25 @@ namespace SoloBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client)
+        public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client, IFormFile? LogoFile)
         {
             if (ModelState.IsValid)
             {
+                if (LogoFile != null && LogoFile.Length > 0)
+                {
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+            Directory.CreateDirectory(uploadsFolder); // ensures folder exists
+
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(LogoFile.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await LogoFile.CopyToAsync(stream);
+            }
+
+            client.LogoFileName = uniqueFileName;
+        }
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
