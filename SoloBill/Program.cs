@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
 using SoloBill.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,11 @@ else
     app.UseHsts();
 }
 
+//Set Global Culture
+var cultureInfo = new CultureInfo("en-IE"); 
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -47,5 +53,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
 
 app.Run();
