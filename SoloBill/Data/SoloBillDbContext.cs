@@ -17,12 +17,12 @@ public class SoloBillDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        Prevents truncation of decimal values in SQL Server
+        //Prevents truncation of decimal values in SQL Server
         modelBuilder.Entity<Invoice>()
             .Property(i => i.Amount)
             .HasPrecision(18, 2);
 
-//Test        
+//Test data      
 modelBuilder.Entity<Client>().HasData(new Client
 {
     ClientId = 1,
