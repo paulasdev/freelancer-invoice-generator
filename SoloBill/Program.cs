@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
+using SoloBill.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<SoloBillDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+// PDF service
+builder.Services.AddScoped<InvoicePdfService>();
 
 var app = builder.Build();
 

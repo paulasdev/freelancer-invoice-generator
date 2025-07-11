@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IjhzL+Im/c4=",
+  "dgSpecHash": "W6tavfFMuZQ=",
   "success": true,
   "projectFilePath": "/Users/paulacarolinasilva/freelancer-invoice-generator/SoloBill/SoloBill.csproj",
   "expectedPackageFiles": [
@@ -137,6 +137,7 @@
     "/Users/paulacarolinasilva/.nuget/packages/nuget.projectmodel/6.11.0/nuget.projectmodel.6.11.0.nupkg.sha512",
     "/Users/paulacarolinasilva/.nuget/packages/nuget.protocol/6.11.0/nuget.protocol.6.11.0.nupkg.sha512",
     "/Users/paulacarolinasilva/.nuget/packages/nuget.versioning/6.11.0/nuget.versioning.6.11.0.nupkg.sha512",
+    "/Users/paulacarolinasilva/.nuget/packages/questpdf/2025.7.0/questpdf.2025.7.0.nupkg.sha512",
     "/Users/paulacarolinasilva/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.10/sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
     "/Users/paulacarolinasilva/.nuget/packages/sqlitepclraw.core/2.1.10/sqlitepclraw.core.2.1.10.nupkg.sha512",
     "/Users/paulacarolinasilva/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.10/sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",

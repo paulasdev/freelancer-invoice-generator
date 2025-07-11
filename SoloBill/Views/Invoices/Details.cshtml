@@ -42,7 +42,8 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.InvoiceId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-warning">Edit</a>
+    <a asp-action="ExportToPdf" asp-route-id="@Model.InvoiceId" class="btn btn-primary">Export to PDF</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
