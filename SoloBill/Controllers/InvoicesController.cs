@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
+using SoloBill.Services;
 
 namespace SoloBill.Controllers
 {
     public class InvoicesController : Controller
     {
         private readonly SoloBillDbContext _context;
+        private readonly InvoicePdfService _pdfService;
 
-        public InvoicesController(SoloBillDbContext context)
+        public InvoicesController(SoloBillDbContext context, InvoicePdfService pdfService)
         {
             _context = context;
+            _pdfService = pdfService;
         }
 
         // GET: Invoices
@@ -159,5 +162,22 @@ namespace SoloBill.Controllers
         {
             return _context.Invoices.Any(e => e.InvoiceId == id);
         }
+
+        //PDF service
+            public async Task<IActionResult> ExportToPdf(int id)
+    {
+        var invoice = await _context.Invoices
+            .Include(i => i.Client)
+            .FirstOrDefaultAsync(i => i.InvoiceId == id);
+
+        if (invoice == null)
+        {
+            return NotFound();
+        }
+
+        var pdf = _pdfService.GeneratePdf(invoice);
+
+        return File(pdf, "application/pdf", $"Invoice_{invoice.InvoiceId}.pdf");
+    }
     }
 }
