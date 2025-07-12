@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SoloBill.Models;
 
 namespace SoloBill.Data;
 
-public class SoloBillDbContext : IdentityDbContext<IdentityUser>
+public class SoloBillDbContext : IdentityDbContext<ApplicationUser>
 {
     public SoloBillDbContext(DbContextOptions<SoloBillDbContext> options)
         : base(options)
@@ -12,6 +13,7 @@ public class SoloBillDbContext : IdentityDbContext<IdentityUser>
     }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
