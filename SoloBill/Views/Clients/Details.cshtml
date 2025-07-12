@@ -9,12 +9,6 @@
 <div>
     <h4>Client</h4>
     <hr />
-       @if (!string.IsNullOrEmpty(Model.LogoFileName))
-    {
-        <div class="mb-3 img-thumbnail">
-            <img src="~/uploads/@Model.LogoFileName" alt="Client Logo" width="150" class="img-thumbnail" />
-        </div>
-    }
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)

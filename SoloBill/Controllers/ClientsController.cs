@@ -57,25 +57,11 @@ namespace SoloBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client, IFormFile? LogoFile)
+        public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client)
         {
             if (ModelState.IsValid)
             {
-                if (LogoFile != null && LogoFile.Length > 0)
-                {
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-            Directory.CreateDirectory(uploadsFolder); // ensures folder exists
-
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(LogoFile.FileName);
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await LogoFile.CopyToAsync(stream);
-            }
-
-            client.LogoFileName = uniqueFileName;
-        }
+               
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

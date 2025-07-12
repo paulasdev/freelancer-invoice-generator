@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
 using SoloBill.Services;
 using System.Globalization;
+using SoloBill.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +16,15 @@ builder.Services.AddDbContext<SoloBillDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<SoloBillDbContext>();
 
 builder.Services.AddControllersWithViews();
 
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
+
+
 
 var app = builder.Build();
 
