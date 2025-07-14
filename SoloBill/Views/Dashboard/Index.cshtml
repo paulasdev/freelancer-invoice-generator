@@ -1,0 +1,80 @@
+@model SoloBill.ViewModels.DashboardViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 bg-dark text-white vh-100">
+            <h3 class="mt-4">SoloBill</h3>
+            <ul class="nav flex-column mt-5">
+                <li class="nav-item"><a class="nav-link text-white" href="#">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Invoices</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Clients</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Profile</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-9 p-5">
+            <h2>Hello, @User.Identity.Name</h2>
+            <p class="text-muted">Your invoice overview</p>
+
+            <div class="row text-center mb-4">
+                <div class="col-md-4">
+                    <div class="card text-bg-light">
+                        <div class="card-body">
+                            <h5>Total Clients</h5>
+                            <h3>@Model.TotalClients</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-bg-light">
+                        <div class="card-body">
+                            <h5>Invoices Sent</h5>
+                            <h3>@Model.InvoicesSent</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-bg-light">
+                        <div class="card-body">
+                            <h5>Unpaid Invoices</h5>
+                            <h3>@Model.UnpaidInvoices</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Invoices</h5>
+                    <small>This data is updated daily at 07:00</small>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Status</th>
+                                <th>Client</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var invoice in Model.RecentInvoices)
+                            {
+                                <tr>
+                                    <td>@invoice.InvoiceNumber</td>
+                                    <td>@invoice.Status</td>
+                                    <td>@invoice.ClientName</td>
+                                    <td><a href="#">Archive</a></td>
+                                    <td><a href="#">Download</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
