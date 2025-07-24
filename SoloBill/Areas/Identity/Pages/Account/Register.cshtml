@@ -31,7 +31,7 @@
         }
 
         .right-panel {
-            background-color: #014A59;
+            background-color: #8a3ffc;
             color: white;
             padding: 3rem;
             display: flex;
@@ -47,15 +47,27 @@
             font-weight: bold;
             font-size: 1.5rem;
         }
+
+          .features {
+            padding: 60px 20px;
+        }
+        .features h3 {
+            font-weight: 600;
+            }
     </style>
 </head>
 <body>
 
 <div class="container-fluid register-container d-flex">
+    
     <div class="col-md-6 left-panel">
-        <div class="brand mb-4">SoloBill</div>
+            <a class="navbar-brand d-inline-flex align-items-center" href="/">
+    <img src="~/images/solobill-logo.png" alt="SoloBill Logo" style="height: 40px;" class="me-2" />
+    <span class="fw-bold text-dark" style="font-size: 1.5rem;"></span>
+</a>    
         <h3 class="mb-4">Create an account</h3>
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form method="post">
+    <input type="hidden" name="returnUrl" value="/Dashboard" />
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group mb-3">
@@ -97,9 +109,22 @@
         </div>
     </div>
 
-    <div class="col-md-6 right-panel text-center">
-        <h4>Very simple way you can engage</h4>
-        <p class="mt-2">Welcome to SoloBill – Track and manage your freelance invoices with ease.</p>
+    <div class="col-md-6 right-panel features container text-center">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>🚀 Quick Setup</h3>
+                <p>Sign up and start creating invoices in minutes.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>📊 Dashboard</h3>
+                <p>View recent activity, unpaid invoices, and more.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>🔐 Secure</h3>
+                <p>Your data is safe and protected with SSL security.</p>
+            </div>
+        </div>
+
     </div>
 </div>
 
