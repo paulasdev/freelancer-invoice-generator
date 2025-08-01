@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;    
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using SoloBill.Models;
 
 namespace SoloBill.Controllers
 {
@@ -15,17 +17,24 @@ namespace SoloBill.Controllers
     {
         private readonly SoloBillDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClientsController(SoloBillDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ClientsController(SoloBillDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-           _webHostEnvironment = webHostEnvironment; //save files to wwwroot/uploads
+            _webHostEnvironment = webHostEnvironment; //save files to wwwroot/uploads
+            _userManager = userManager;
         }
 
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clients.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var userClients = await _context.Clients
+                .Where(c => c.UserId == user.Id)
+                .ToListAsync();
+
+            return View(userClients);
         }
 
         // GET: Clients/Details/5
@@ -35,13 +44,11 @@ namespace SoloBill.Controllers
             {
                 return NotFound();
             }
-
+            var user = await _userManager.GetUserAsync(User);
             var client = await _context.Clients
-                .FirstOrDefaultAsync(m => m.ClientId == id);
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
             if (client == null)
-            {
                 return NotFound();
-            }
 
             return View(client);
         }
@@ -59,9 +66,11 @@ namespace SoloBill.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client)
         {
+            var user = await _userManager.GetUserAsync(User);
+            client.UserId = user.Id;
+
             if (ModelState.IsValid)
             {
-               
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -76,12 +85,12 @@ namespace SoloBill.Controllers
             {
                 return NotFound();
             }
-
-            var client = await _context.Clients.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var client = await _context.Clients
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
             if (client == null)
-            {
                 return NotFound();
-            }
+
             return View(client);
         }
 
@@ -93,9 +102,10 @@ namespace SoloBill.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("ClientId,Name,Email,Company,Address")] Client client)
         {
             if (id != client.ClientId)
-            {
                 return NotFound();
-            }
+
+            var user = await _userManager.GetUserAsync(User);
+            client.UserId = user.Id;
 
             if (ModelState.IsValid)
             {
@@ -107,16 +117,13 @@ namespace SoloBill.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ClientExists(client.ClientId))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(client);
         }
 
@@ -143,13 +150,16 @@ namespace SoloBill.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Clients.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var client = await _context.Clients
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
+
             if (client != null)
             {
                 _context.Clients.Remove(client);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -157,5 +167,8 @@ namespace SoloBill.Controllers
         {
             return _context.Clients.Any(e => e.ClientId == id);
         }
+
     }
+
+
 }
