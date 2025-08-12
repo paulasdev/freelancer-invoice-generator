@@ -20,6 +20,14 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<SoloBillDbContext>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
+
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    });
 
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
@@ -40,7 +48,7 @@ else
 }
 
 //Set Global Culture
-var cultureInfo = new CultureInfo("en-IE"); 
+var cultureInfo = new CultureInfo("en-IE");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
@@ -49,13 +57,16 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
+app.MapControllers();
 
 app.Run();
