@@ -22,13 +22,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-    });
-
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
 
