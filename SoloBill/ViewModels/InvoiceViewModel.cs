@@ -10,6 +10,7 @@ namespace SoloBill.ViewModels
 
         public Client? Client { get; set; }
 
+        public ApplicationUser? ApplicationUser { get; set; }
         public string CompanyName { get; set; } = "";
         public string? Address { get; set; }
         public string? CompanyPhone { get; set; }

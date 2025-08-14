@@ -69,7 +69,7 @@ namespace SoloBill.Controllers
 
             if (id.HasValue)
             {
-                invoice = await _context.Invoices.Include(i => i.Client).FirstOrDefaultAsync(i => i.InvoiceId == id);
+                invoice = await _context.Invoices.Include(i => i.Client).FirstOrDefaultAsync(i => i.InvoiceId == id && i.UserId == user.Id);
                 items = await _context.InvoiceItems.Where(ii => ii.InvoiceId == id).ToListAsync();
             }
             else
@@ -94,7 +94,8 @@ namespace SoloBill.Controllers
                 BankName = user.BankName,
                 IBAN = user.IBAN,
                 BIC = user.BIC,
-                Notes = invoice.Notes
+                Notes = invoice?.Notes,
+                ApplicationUser = user
             };
 
             ViewData["ClientId"] = new SelectList(_context.Clients.Where(c => c.UserId == user.Id), "ClientId", "Name");
@@ -172,36 +173,35 @@ namespace SoloBill.Controllers
                 viewModel.BankName = user.BankName;
                 viewModel.IBAN = user.IBAN;
                 viewModel.BIC = user.BIC;
-                viewModel.Notes = user.BankDetails;
+                viewModel.Notes = viewModel.Notes ?? "";
 
+                viewModel.ApplicationUser = user;
                 return View(viewModel);
             }
+
+            viewModel.Invoice.Notes = viewModel.Notes?.Trim();
 
             // 1. Calculate invoice total
             viewModel.Invoice.Amount = viewModel.Items.Sum(i => i.Quantity * i.UnitPrice);
 
             // 2. Add invoice (without InvoiceNumber yet)
             _context.Invoices.Add(viewModel.Invoice);
-            await _context.SaveChangesAsync(); // now InvoiceId is set
-
-            // 3. Generate invoice number
-            viewModel.Invoice.InvoiceNumber = $"INV{DateTime.Today:yyyyMMdd}{viewModel.Invoice.InvoiceId:D2}";
-
-            // 4. Update invoice
-            _context.Invoices.Update(viewModel.Invoice);
-
-            // 5. Set InvoiceId for items and add
-            foreach (var item in viewModel.Items)
-            {
-                item.InvoiceId = viewModel.Invoice.InvoiceId;
-            }
-            viewModel.Invoice.UserId = user.Id;
-            _context.InvoiceItems.AddRange(viewModel.Items);
-
-
-            // 6. Save all
             await _context.SaveChangesAsync();
 
+            // 3. Generate invoice number
+            viewModel.Invoice.InvoiceNumber = $"INV{viewModel.Invoice.InvoiceId:D3}";
+            _context.Invoices.Update(viewModel.Invoice);
+            await _context.SaveChangesAsync();
+
+            // 4. Save items
+            foreach (var item in viewModel.Items)
+                item.InvoiceId = viewModel.Invoice.InvoiceId;
+
+            _context.InvoiceItems.AddRange(viewModel.Items);
+            await _context.SaveChangesAsync();
+
+
+            // 6. Redirect to GET create(id)
             return RedirectToAction("Create", new { id = viewModel.Invoice.InvoiceId });
         }
 
@@ -218,7 +218,7 @@ namespace SoloBill.Controllers
             if (id != updatedInvoice.InvoiceId)
                 return NotFound();
 
-            // 🔐 Fetch invoice and validate ownership
+            //Fetch invoice and validate ownership
             var invoice = await _context.Invoices
                 .FirstOrDefaultAsync(i => i.InvoiceId == id && i.UserId == user.Id);
 
