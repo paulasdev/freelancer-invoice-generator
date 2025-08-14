@@ -16,11 +16,11 @@
         <span class="input-group-text"><i class="fas fa-search"></i></span>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive" style="max-height:60vh; overflow:auto;">
         <table class="table table-hover bg-white shadow-sm rounded" id="clientTable">
-            <thead class="table-light">
+            <thead class="table-light position-sticky top-0" style="z-index:1;">
                 <tr>
-                    <th class="sortable" onclick="sortTable(0)">Name</th>
+                    <th class="sortable" onclick="sortTable(0)">ContactName</th>
                     <th class="sortable" onclick="sortTable(1)">Email</th>
                     <th class="sortable" onclick="sortTable(2)">Company</th>
                     <th class="sortable" onclick="sortTable(3)">Address</th>
@@ -36,9 +36,9 @@
                         <td>@client.Email</td>
                         <td>@client.Company</td>
                         <td>@client.Address</td>
-                        <td>@client.Invoices?.Count() ?? 0</td>
+                        <td>@(client.Invoices?.Count ?? 0)</td>
                        <td class="text-end">
-    <div class="drostart">
+    <div class="dropdown">
         <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-three-dots-vertical"></i>
         </button>
@@ -72,29 +72,50 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Real-time search
-        document.getElementById("clientSearch").addEventListener("keyup", function () {
-            var input = this.value.toLowerCase();
-            var rows = document.querySelectorAll("#clientTable tbody tr");
+<script>
 
-            rows.forEach(function (row) {
-                row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
-            });
-        });
+(function () {
+  const search = document.getElementById('clientSearch');
+  const table  = document.getElementById('clientTable');
+  if (!search || !table) return;
 
-        // Sortable columns
-        function sortTable(colIndex) {
-            var table = document.getElementById("clientTable");
-            var rows = Array.from(table.rows).slice(1);
-            var isAsc = table.getAttribute("data-sort") !== "asc";
+  const tbody  = table.tBodies[0];
 
-            rows.sort(function (a, b) {
-                return (a.cells[colIndex].innerText.localeCompare(b.cells[colIndex].innerText)) * (isAsc ? 1 : -1);
-            });
 
-            rows.forEach(row => table.appendChild(row));
-            table.setAttribute("data-sort", isAsc ? "asc" : "desc");
-        }
-    </script>
+  const norm = s => (s || '')
+      .toString()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase();
+
+  function filterRows() {
+    const q = norm(search.value);
+    Array.from(tbody.rows).forEach(tr => {
+      const text = norm(tr.innerText);
+      tr.hidden = q && !text.includes(q);
+    });
+  }
+
+  search.addEventListener('input', filterRows);
+
+  let lastCol = -1, dir = 1;
+  window.sortTable = function (colIndex) {
+    dir = (colIndex === lastCol) ? -dir : 1;
+    lastCol = colIndex;
+
+    const rows = Array.from(tbody.rows).filter(tr => !tr.hidden);
+    rows.sort((a, b) => {
+      let A = a.cells[colIndex]?.innerText.trim() ?? '';
+      let B = b.cells[colIndex]?.innerText.trim() ?? '';
+      if (colIndex === 4) {
+        return ((parseInt(A, 10) || 0) - (parseInt(B, 10) || 0)) * dir;
+      }
+      return A.localeCompare(B, undefined, { sensitivity: 'base' }) * dir;
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  };
+
+  filterRows();
+})();
+</script>
 }

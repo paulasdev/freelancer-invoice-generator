@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoloBill.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using SoloBill.Models;
 
@@ -19,19 +16,25 @@ namespace SoloBill.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClientsController(SoloBillDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+        public ClientsController(
+            SoloBillDbContext context,
+            IWebHostEnvironment webHostEnvironment,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment; //save files to wwwroot/uploads
+            _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
         }
 
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = _userManager.GetUserId(User);
+
             var userClients = await _context.Clients
-                .Where(c => c.UserId == user.Id)
+                .Where(c => c.UserId == userId)
+                .Include(c => c.Invoices.Where(i => i.UserId == userId))
+                .AsNoTracking()
                 .ToListAsync();
 
             return View(userClients);
@@ -40,107 +43,89 @@ namespace SoloBill.Controllers
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var user = await _userManager.GetUserAsync(User);
+            if (id == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+
             var client = await _context.Clients
-                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
-            if (client == null)
-                return NotFound();
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == userId);
+
+            if (client == null) return NotFound();
 
             return View(client);
         }
 
         // GET: Clients/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         // POST: Clients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClientId,Name,Email,Company,Address")] Client client)
         {
-            var user = await _userManager.GetUserAsync(User);
-            client.UserId = user.Id;
+            var userId = _userManager.GetUserId(User);
+            client.UserId = userId;
 
-            if (ModelState.IsValid)
-            {
-                _context.Add(client);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(client);
+            if (!ModelState.IsValid) return View(client);
+
+            _context.Add(client);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var user = await _userManager.GetUserAsync(User);
+            if (id == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+
             var client = await _context.Clients
-                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
-            if (client == null)
-                return NotFound();
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == userId);
+
+            if (client == null) return NotFound();
 
             return View(client);
         }
 
         // POST: Clients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClientId,Name,Email,Company,Address")] Client client)
         {
-            if (id != client.ClientId)
-                return NotFound();
+            if (id != client.ClientId) return NotFound();
 
-            var user = await _userManager.GetUserAsync(User);
-            client.UserId = user.Id;
+            client.UserId = _userManager.GetUserId(User);
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(client);
+
+            try
             {
-                try
-                {
-                    _context.Update(client);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClientExists(client.ClientId))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(client);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClientExists(client.ClientId)) return NotFound();
+                throw;
             }
 
-            return View(client);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Clients/Delete/5
+        // GET: Clients/Delete/5  (keep this one; remove the duplicate)
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
 
             var client = await _context.Clients
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ClientId == id && m.UserId == userId);
+
+            if (client == null) return NotFound();
 
             return View(client);
         }
@@ -150,9 +135,10 @@ namespace SoloBill.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = _userManager.GetUserId(User);
+
             var client = await _context.Clients
-                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == user.Id);
+                .FirstOrDefaultAsync(c => c.ClientId == id && c.UserId == userId);
 
             if (client != null)
             {
@@ -163,12 +149,7 @@ namespace SoloBill.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(e => e.ClientId == id);
-        }
-
+        private bool ClientExists(int id) =>
+            _context.Clients.Any(e => e.ClientId == id);
     }
-
-
 }
