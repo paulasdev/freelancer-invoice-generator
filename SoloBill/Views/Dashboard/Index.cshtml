@@ -1,80 +1,99 @@
 @model SoloBill.ViewModels.DashboardViewModel
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3 bg-dark text-white vh-100">
-            <h3 class="mt-4">SoloBill</h3>
-            <ul class="nav flex-column mt-5">
-                <li class="nav-item"><a class="nav-link text-white" href="#">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Invoices</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Clients</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Profile</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Settings</a></li>
-            </ul>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-purple">Hello, @User.Identity.Name</h2>
+            <p class="text-muted mb-0">Your invoice overview</p>
         </div>
+    </div>
 
-        <div class="col-md-9 p-5">
-            <h2>Hello, @User.Identity.Name</h2>
-            <p class="text-muted">Your invoice overview</p>
-
-            <div class="row text-center mb-4">
-                <div class="col-md-4">
-                    <div class="card text-bg-light">
-                        <div class="card-body">
-                            <h5>Total Clients</h5>
-                            <h3>@Model.TotalClients</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-light">
-                        <div class="card-body">
-                            <h5>Invoices Sent</h5>
-                            <h3>@Model.InvoicesSent</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-light">
-                        <div class="card-body">
-                            <h5>Unpaid Invoices</h5>
-                            <h3>@Model.UnpaidInvoices</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Invoices</h5>
-                    <small>This data is updated daily at 07:00</small>
-                </div>
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Invoice No</th>
-                                <th>Status</th>
-                                <th>Client</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var invoice in Model.RecentInvoices)
-                            {
-                                <tr>
-                                    <td>@invoice.InvoiceNumber</td>
-                                    <td>@invoice.Status</td>
-                                    <td>@invoice.ClientName</td>
-                                    <td><a href="#">Archive</a></td>
-                                    <td><a href="#">Download</a></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <h5 class="fw-bold">Total Clients</h5>
+                    <h3 class="text-purple mb-0">@Model.TotalClients</h3>
                 </div>
             </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">Invoices Sent</h5>
+                    <h3 class="text-purple mb-0">@Model.InvoicesSent</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 mx-auto">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">Unpaid Invoices</h5>
+                    <h3 class="text-purple mb-0">@Model.UnpaidInvoices</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Invoices -->
+    <div class="card shadow-sm">
+        <div class="table-responsive" style="max-height:50vh; overflow:auto;">
+            <table class="table table-hover mb-0">
+                <thead class="table-light position-sticky top-0" style="z-index:1;">
+                    <tr>
+                        <th>Invoice No</th>
+                        <th>Status</th>
+                        <th>Client</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RecentInvoices != null && Model.RecentInvoices.Any())
+                    {
+                        foreach (var invoice in Model.RecentInvoices)
+                        {
+                            <tr>
+                                <td>@invoice.InvoiceNumber</td>
+                                <td>
+                                    @if (invoice.Status?.ToLower() == "paid")
+                                    {
+                                        <span class="badge bg-success">Paid</span>
+                                    }
+                                    else if (invoice.Status?.ToLower() == "overdue")
+                                    {
+                                        <span class="badge bg-warning text-dark">Overdue</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@invoice.Status</span>
+                                    }
+                                </td>
+                                <td>@invoice.ClientName</td>
+                                <td>
+                                    <a asp-action="ExportToPdf" 
+                                       asp-controller="Invoices" 
+                                       asp-route-id="@invoice.InvoiceId" 
+                                       class="btn btn-outline-primary btn-sm rounded-pill">
+                                        <i class="bi bi-download me-1"></i> Download PDF
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-3">No recent invoices found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
