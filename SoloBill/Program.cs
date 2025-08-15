@@ -7,46 +7,50 @@ using SoloBill.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DbContext
+
 var connectionString = builder.Configuration.GetConnectionString("SoloBillDbContext")
     ?? throw new InvalidOperationException("Connection string 'SoloBillDbContext' not found.");
 
 builder.Services.AddDbContext<SoloBillDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Identity
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
 })
 .AddEntityFrameworkStores<SoloBillDbContext>();
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
 
 var app = builder.Build();
 
-// Error handlers (configure ONCE)
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();           
     app.UseMigrationsEndPoint();
     app.UseStatusCodePagesWithReExecute("/Error/{0}");
 }
 else
 {
-    app.UseExceptionHandler("/Error/500");
-    app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    app.UseExceptionHandler("/Error/500");    
     app.UseHsts();
 }
 
-// Global culture
 var cultureInfo = new CultureInfo("en-IE");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
@@ -64,6 +68,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
-
 
 app.Run();

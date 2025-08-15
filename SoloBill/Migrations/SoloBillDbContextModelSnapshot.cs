@@ -17,7 +17,7 @@ namespace SoloBill.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -46,19 +46,14 @@ namespace SoloBill.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ClientId");
 
-                    b.ToTable("Clients");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            ClientId = 1,
-                            Address = "123 Main Street",
-                            Company = "ACME Inc.",
-                            Email = "info@acme.com",
-                            Name = "ACME Inc."
-                        });
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Invoice", b =>
@@ -79,28 +74,28 @@ namespace SoloBill.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("InvoiceNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("InvoiceId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Invoices");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            InvoiceId = 1,
-                            Amount = 500.00m,
-                            ClientId = 1,
-                            DueDate = new DateTime(2025, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsPaid = false,
-                            IssueDate = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -251,7 +246,19 @@ namespace SoloBill.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BIC")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("BankDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyPhone")
@@ -267,6 +274,10 @@ namespace SoloBill.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("IBAN")
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -286,6 +297,9 @@ namespace SoloBill.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -336,6 +350,7 @@ namespace SoloBill.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("InvoiceItemId");
@@ -343,6 +358,15 @@ namespace SoloBill.Migrations
                     b.HasIndex("InvoiceId");
 
                     b.ToTable("InvoiceItems");
+                });
+
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.HasOne("SoloBill.Models.ApplicationUser", "User")
+                        .WithMany("Clients")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Invoice", b =>
@@ -353,7 +377,13 @@ namespace SoloBill.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SoloBill.Models.ApplicationUser", "User")
+                        .WithMany("Invoices")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -410,7 +440,7 @@ namespace SoloBill.Migrations
             modelBuilder.Entity("SoloBill.Models.InvoiceItem", b =>
                 {
                     b.HasOne("Invoice", "Invoice")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -420,6 +450,18 @@ namespace SoloBill.Migrations
 
             modelBuilder.Entity("Client", b =>
                 {
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("Invoice", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("SoloBill.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Clients");
+
                     b.Navigation("Invoices");
                 });
 #pragma warning restore 612, 618

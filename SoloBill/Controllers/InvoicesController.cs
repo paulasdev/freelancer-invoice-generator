@@ -9,10 +9,12 @@ using SoloBill.Data;
 using SoloBill.Services;
 using SoloBill.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using SoloBill.Models;
 
 namespace SoloBill.Controllers
 {
+
     public class InvoicesController : Controller
     {
         private readonly SoloBillDbContext _context;

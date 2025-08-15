@@ -74,7 +74,7 @@ public class ApplicationUserController : Controller
             user.LogoPath = uniqueFileName;
         }
 
-        // 🔧 Save changes
+        //Save changes
         var result = await _userManager.UpdateAsync(user);
 
         if (result.Succeeded)
