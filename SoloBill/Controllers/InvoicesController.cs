@@ -14,7 +14,7 @@ using SoloBill.Models;
 
 namespace SoloBill.Controllers
 {
-
+    [Authorize]
     public class InvoicesController : Controller
     {
         private readonly SoloBillDbContext _context;
