@@ -419,3 +419,12 @@ FodyWeavers.xsd
 *.user
 bin/
 obj/
+
+# build
+**/bin/
+**/obj/
+# local dev db
+**/app.db
+# macOS
+**/.DS_Store
+
