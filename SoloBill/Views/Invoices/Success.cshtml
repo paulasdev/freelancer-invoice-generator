@@ -1,0 +1,99 @@
+@model SoloBill.ViewModels.InvoiceViewModel
+
+@{
+    ViewData["Title"] = "Invoice Created Successfully";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-success">Invoice Created Successfully</h2>
+        <p class="lead">Invoice Number: <strong>@Model.Invoice.InvoiceNumber</strong></p>
+
+        <a asp-action="Index" class="btn btn-outline-secondary mt-3">Back to Invoice List</a>
+        <a asp-action="ExportToPdf" asp-route-id="@Model.Invoice.InvoiceId" class="btn btn-primary mt-3 ms-2">Download PDF</a>
+    </div>
+
+    <!-- Right Column: Invoice Preview -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body bg-light px-5 py-4 rounded shadow-sm">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="text-uppercase">Invoice</h4>
+                    <p class="text-muted">#@Model.Invoice.InvoiceNumber</p>
+                </div>
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.LogoPath))
+                    {
+                        <img src="@Model.LogoPath" alt="Company Logo" style="height: 60px;" />
+                    }
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-uppercase">From:</h6>
+                    <p class="mb-1"><strong>@Model.CompanyName</strong></p>
+                    <p class="mb-1">@Model.Address</p>
+                    <p class="mb-1">@Model.CompanyPhone</p>
+                    <p class="mb-1">@Model.Email</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-uppercase">To:</h6>
+                    <p class="mb-1"><strong>@Model.Invoice.Client?.Name</strong></p>
+                    <p class="mb-1">@Model.Invoice.Client?.Company</p>
+                    <p class="mb-1">@Model.Invoice.Client?.Address</p>
+                    <p class="mb-1">@Model.Invoice.Client?.Email</p>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <strong>Issue Date:</strong> @Model.Invoice.IssueDate.ToString("dd MMMM yyyy")
+                </div>
+                <div class="col text-end">
+                    <strong>Due Date:</strong> @Model.Invoice.DueDate.ToString("dd MMMM yyyy")
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-borderless mt-3">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Units</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items.Where(i => i.Quantity > 0 && i.UnitPrice > 0))
+                        {
+                            <tr>
+                                <td>@item.Description</td>
+                                <td>@item.Quantity</td>
+                                <td>@($"€{item.UnitPrice:N2}")</td>
+                                <td>@($"€{item.Total:N2}")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <h5 class="text-end mt-3">
+                Total: <span class="text-purple">€@Model.Items.Sum(x => x.Quantity * x.UnitPrice).ToString("N2")</span>
+            </h5>
+
+            <hr />
+            <div class="border-top mt-4 pt-3">
+                <h6 class="fw-bold">Payment Method</h6>
+                <p class="mb-1">Account Name: @Model.CompanyName</p>
+                <p class="mb-1">IBAN: @Model.IBAN</p>
+                <p class="mb-1">BIC: @Model.BIC</p>
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <p class="mb-1">Note: @Model.Notes</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using SoloBill.Models;
 
 public class Client
 {
@@ -8,5 +10,10 @@ public class Client
     public string Email { get; set; } = "";
     public string Company { get; set; } = "";
     public string Address { get; set; } = "";
+
+    // Reference to the logged-in user
+    public string? UserId { get; set; } = "";
+    public ApplicationUser? User { get; set; }
+
     public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

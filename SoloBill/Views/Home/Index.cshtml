@@ -1,8 +1,40 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to SoloBill";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="container py-5 d-flex align-items-center justify-content-between flex-wrap">
+    <div class="col-lg-6 mb-4">
+        <h1 class="display-5 fw-bold">
+            Create Professional <span class="text-primary">Invoices</span> in Minutes
+        </h1>
+        <p class="lead mt-3">
+            SoloBill is a free, simple way to create, send, and manage your freelance invoices all in one place.
+        </p>
+
+        <ul class="list-unstyled mt-4">
+            <li class="mb-2"><span class="text-success">✔</span> No credit card required</li>
+            <li class="mb-2"><span class="text-success">✔</span> 100% secure & free</li>
+            <li class="mb-2"><span class="text-success">✔</span> Mobile friendly</li>
+            <li class="mb-2"><span class="text-success">✔</span> PDF invoice downloads</li>
+        </ul>
+
+        <div class="mt-4 d-flex flex-wrap gap-2">
+            <a href="/Identity/Account/Register" 
+               class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm">
+                <i class="bi bi-lightning-charge-fill me-1"></i> Get Started Free
+            </a>
+            <a href="/Identity/Account/Login" 
+               class="btn btn-ghost-primary btn-lg px-4 rounded-pill">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <img src="~/images/invoice-preview.png" 
+             alt="Invoice Preview" 
+             class="img-fluid shadow rounded" />
+    </div>
+</section>

@@ -1,49 +1,52 @@
 @model Invoice
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Invoice Details";
 }
 
-<h1>Details</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<div>
-    <h4>Invoice</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.ClientId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IssueDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.IssueDate.ToString("dd/MM/yyyy")
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DueDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.DueDate.ToString("dd/MM/yyyy")
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPaid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPaid)
-        </dd>
-    </dl>
-</div>
-<div class="mt-4">
-    <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-warning">Edit</a>
-    <a asp-action="ExportToPdf" asp-route-id="@Model.InvoiceId" class="btn btn-primary">Export to PDF</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+        <!-- Main Content -->
+        <main class="col-md-9 bg-light p-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold">Invoice #@Model.InvoiceId</h2>
+                <a href="/Invoices/Edit/@Model.InvoiceId" class="btn btn-outline-secondary rounded-pill">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Client:</strong> @Model.Client?.Name</p>
+                            <p><strong>Issue Date:</strong> @Model.IssueDate.ToShortDateString()</p>
+                            <p><strong>Due Date:</strong> @Model.DueDate.ToShortDateString()</p>
+                            <p><strong>Status:</strong> 
+                                @if (Model.IsPaid)
+                                {
+                                    <span class="badge bg-success">Paid</span>
+                                }
+                                else if (Model.DueDate < DateTime.Now)
+                                {
+                                    <span class="badge bg-warning text-dark">Overdue</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Unpaid</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h4 class="fw-bold">Total: €@Model.Amount.ToString("0.00")</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/Invoices" class="btn btn-outline-dark mt-4">Back to Invoices</a>
+        </main>
+    </div>
 </div>

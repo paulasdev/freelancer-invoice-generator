@@ -7,40 +7,51 @@ using SoloBill.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 var connectionString = builder.Configuration.GetConnectionString("SoloBillDbContext")
-                      ?? throw new InvalidOperationException("Connection string 'SoloBillDbContext' not found.");
+    ?? throw new InvalidOperationException("Connection string 'SoloBillDbContext' not found.");
 
 builder.Services.AddDbContext<SoloBillDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<SoloBillDbContext>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddEntityFrameworkStores<SoloBillDbContext>();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization();
 
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
 
-
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();           
     app.UseMigrationsEndPoint();
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error/500");    
     app.UseHsts();
 }
 
-//Set Global Culture
-var cultureInfo = new CultureInfo("en-IE"); 
+var cultureInfo = new CultureInfo("en-IE");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
@@ -49,13 +60,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
-
 
 app.Run();

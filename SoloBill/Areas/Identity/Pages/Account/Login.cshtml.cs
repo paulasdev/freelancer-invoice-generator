@@ -110,7 +110,7 @@ namespace SoloBill.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -133,6 +133,23 @@ namespace SoloBill.Areas.Identity.Pages.Account
                 }
             }
 
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostDemoLogin()
+        {
+            // Demo credentials
+            var email = "demo@solobill.com";
+            var password = "Demo123!";
+
+            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return LocalRedirect("/Dashboard");
+            }
+
+            ModelState.AddModelError(string.Empty, "Demo login failed.");
             return Page();
         }
     }

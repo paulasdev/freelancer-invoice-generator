@@ -8,6 +8,6 @@ namespace SoloBill.ViewModels
         public int TotalClients { get; set; }
         public int InvoicesSent { get; set; }
         public int UnpaidInvoices { get; set; }
-        public List<Invoice> RecentInvoices { get; set; } = new List<Invoice>();
+        public List<Invoice> RecentInvoices { get; set; } = new();
     }
 }

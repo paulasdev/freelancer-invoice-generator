@@ -1,6 +1,109 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Header -->
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h1 class="mb-0 text-purple fw-bold">Privacy Policy</h1>
+                <span class="text-muted small">Last updated: @DateTime.UtcNow.ToString("dd MMM yyyy")</span>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <p class="lead mb-4">
+                        SoloBill (“we”, “our”, “us”) respects your privacy and is committed to protecting your personal data.
+                        This policy explains what we collect, why we collect it, and how you can exercise your rights.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">1) Information We Collect</h5>
+                    <ul class="mb-3">
+                        <li><strong>Account details</strong> (e.g., name, email, password hash, company details).</li>
+                        <li><strong>Billing details</strong> (e.g., payment method, billing address, transactions) when applicable.</li>
+                        <li><strong>Invoice & client data</strong> you add to the product.</li>
+                        <li><strong>Usage data</strong> (IP, device, browser, pages visited) and <strong>cookies</strong> to keep you signed in and improve the service.</li>
+                        <li><strong>Support communications</strong> you send to us.</li>
+                    </ul>
+
+                    <h5 class="text-purple fw-semibold mt-4">2) How We Use Your Information</h5>
+                    <ul class="mb-3">
+                        <li>Provide, maintain, and improve SoloBill.</li>
+                        <li>Authenticate users and secure the platform.</li>
+                        <li>Process payments and manage subscriptions.</li>
+                        <li>Provide support and communicate updates.</li>
+                        <li>Comply with legal obligations and prevent fraud.</li>
+                    </ul>
+
+                    <h5 class="text-purple fw-semibold mt-4">3) Sharing Your Information</h5>
+                    <p class="mb-3">
+                        We <strong>do not sell</strong> your personal data. We may share data with trusted service providers
+                        (e.g., hosting, email, analytics, payments), with authorities when required by law, or as part of a
+                        business transfer (e.g., merger/acquisition).
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">4) Data Retention</h5>
+                    <p class="mb-3">
+                        We keep personal data only as long as necessary to provide the Services and meet legal obligations.
+                        You may request deletion at any time (see “Your Rights” below).
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">5) Your Rights (GDPR)</h5>
+                    <p class="mb-2">
+                        If you are in the EU/EEA, you have the right to:
+                    </p>
+                    <ul class="mb-3">
+                        <li>Access, correct, or delete your personal data.</li>
+                        <li>Object to or restrict certain processing.</li>
+                        <li>Data portability (receive your data in a usable format).</li>
+                        <li>Withdraw consent where processing relies on consent.</li>
+                    </ul>
+                    <p class="mb-3">
+                        To exercise these rights, contact us at <a href="mailto:privacy@solobill.com">privacy@solobill.com</a>.
+                        We may need to verify your identity before fulfilling requests.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">6) Cookies</h5>
+                    <p class="mb-3">
+                        We use essential cookies to keep you signed in and preference/performance cookies to improve the experience.
+                        You can control cookies via your browser settings; however, disabling essential cookies may break core features.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">7) Security</h5>
+                    <p class="mb-3">
+                        We employ reasonable technical and organisational measures to protect your data. No method of transmission
+                        over the Internet is 100% secure, but we strive to protect your information to the best of our ability.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">8) International Transfers</h5>
+                    <p class="mb-3">
+                        Where data is transferred outside your jurisdiction, we use appropriate safeguards (e.g., Standard Contractual Clauses).
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">9) Children’s Privacy</h5>
+                    <p class="mb-3">
+                        SoloBill is not intended for children under 16. We do not knowingly collect data from children under 16.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">10) Changes to This Policy</h5>
+                    <p class="mb-4">
+                        We may update this policy from time to time. We will post any changes here and update the “Last updated” date.
+                    </p>
+
+                    <h5 class="text-purple fw-semibold mt-4">11) Contact Us</h5>
+                    <address class="mb-0">
+                        <strong>SoloBill</strong><br />
+                        Email: <a href="mailto:privacy@solobill.com">privacy@solobill.com</a><br />
+                        Address: 123 Market Street, Dublin City Centre, D02 XY45, Ireland
+                    </address>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <a href="/" class="btn btn-outline-primary rounded-pill px-4">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>

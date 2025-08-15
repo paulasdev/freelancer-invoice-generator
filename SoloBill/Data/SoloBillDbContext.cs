@@ -16,32 +16,15 @@ public class SoloBillDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-
-        //Prevents truncation of decimal values in SQL Server
-        modelBuilder.Entity<Invoice>()
-            .Property(i => i.Amount)
-            .HasPrecision(18, 2);
-
-//Test data      
-modelBuilder.Entity<Client>().HasData(new Client
 {
-    ClientId = 1,
-    Name = "ACME Inc.",
-    Email = "info@acme.com",
-    Company = "ACME Inc.",
-    Address = "123 Main Street"
-});
+    base.OnModelCreating(modelBuilder);
 
-modelBuilder.Entity<Invoice>().HasData(new Invoice
-{
-    InvoiceId = 1,
-    ClientId = 1,
-    IssueDate = new DateTime(2025, 7, 1),
-    DueDate = new DateTime(2025, 7, 31),
-    Amount = 500.00m,
-    IsPaid = false
-});
-    }
+ modelBuilder.Entity<Invoice>()
+    .Property(i => i.Amount)
+    .HasPrecision(18, 2);
+
+modelBuilder.Entity<InvoiceItem>()
+    .Property(ii => ii.UnitPrice)
+    .HasPrecision(18, 2);
+}
 }
