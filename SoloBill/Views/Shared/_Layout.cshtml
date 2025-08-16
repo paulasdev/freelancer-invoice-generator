@@ -29,30 +29,29 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <div class="mt-4 d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3 py-3 py-lg-0">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            var isOnDashboard = (ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard"
-                                               && ViewContext.RouteData.Values["action"]?.ToString() == "Index");
-
-                            if (!isOnDashboard)
-                            {
-                                <a asp-controller="Dashboard" asp-action="Index" class="text-dark fw-medium">Dashboard</a>
-                            }
-
                             <form method="post"
                                   asp-area="Identity"
                                   asp-page="/Account/Logout"
                                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
                                   class="d-inline">
-                                <button type="submit" class="btn btn-outline-dark rounded-pill px-4 py-2">Log out</button>
+                                <button type="submit" class="btn btn-outline-neutral rounded-pill px-4 py-2">
+                                    Log out
+                                </button>
                             </form>
                         }
                         else
                         {
-                            <a href="/Identity/Account/Login" class="text-dark fw-medium">Sign In</a>
-                            <a href="/Identity/Account/Register" class="btn btn-purple rounded-pill px-4 py-2">Register</a>
+                            <a href="/Identity/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2">
+                                Sign In
+                            </a>
+                            <a href="/Identity/Account/Register" class="btn btn-primary rounded-pill px-4 py-2">
+                                Register
+                            </a>
                         }
                     </div>
                 </div>
@@ -78,7 +77,6 @@
                         <div class="px-3 mt-2 mb-1 text-uppercase small fw-semibold text-white-50">Overview</div>
                         <a class="sb-link d-flex align-items-center @(ViewContext.RouteData.Values["controller"]?.ToString()=="Dashboard" ? "active" : "")"
                            href="/Dashboard" aria-current="@(ViewContext.RouteData.Values["controller"]?.ToString()=="Dashboard" ? "page" : null)">
-                            <!-- New 2x2 rounded grid icon -->
                             <svg class="sb-ico sb-ico-grid me-2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                 <rect x="3"  y="3"  width="8" height="8" rx="2"></rect>
                                 <rect x="13" y="3"  width="8" height="8" rx="2"></rect>
