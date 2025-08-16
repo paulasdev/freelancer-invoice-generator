@@ -198,22 +198,20 @@ a.navbar-brand {
   transform: translateY(-1px);
 }
 
+/* Softer outline*/
 .btn-outline-purple {
-  background-color: transparent;
-  border: 0.5px solid #8a3ffc;
-  color: #8a3ffc;
+  border: 1.5px solid rgba(138, 63, 252, 0.35);
+  background: #fff;
+  color: rgba(123, 56, 223, 0.35);
   font-weight: 600;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
   transition: all 0.2s ease;
+  border-radius: 0.5rem;
 }
-
 .btn-outline-purple:hover,
 .btn-outline-purple:focus {
-  background-color: #8a3ffc;
-  color: #fff;
-  box-shadow: 0 0.25rem 0.75rem rgba(138, 63, 252, 0.3);
+  background: #fff;
+  color: rgba(123, 56, 223, 0.35);
+  border-color: var(--solo-purple);
 }
 
 /* Soft Secondary */

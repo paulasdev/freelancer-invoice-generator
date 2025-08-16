@@ -70,6 +70,7 @@ namespace SoloBill.Services
                                     info.Spacing(2);
                                     info.Item().Text($"Invoice No: #{model.Invoice.InvoiceNumber}").Bold();
                                     info.Item().Text($"Date : {model.Invoice.IssueDate:dd MMMM, yyyy}");
+                                    info.Item().Text($"Due Date : {model.Invoice.DueDate:dd MMMM, yyyy}");
                                 });
                             });
                         });
