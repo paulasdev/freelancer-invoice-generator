@@ -1,9 +1,11 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using SoloBill.Models;
 
+namespace SoloBill.Models
+{
 public class Invoice
 {
     public string? InvoiceNumber { get; set; } = "";
@@ -33,4 +35,5 @@ public class Invoice
 
     [NotMapped]
     public string CompanyName => Client?.Company ?? "N/A";
+}
 }
