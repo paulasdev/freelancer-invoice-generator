@@ -158,6 +158,13 @@
                                class="btn btn-outline-primary">
                                 <i class="bi bi-download"></i> Download PDF
                             </a>
+                            <form asp-action="SendEmail" asp-controller="Invoices" method="post" class="d-inline">
+        <input type="hidden" name="id" value="@Model.Invoice.InvoiceId" />
+        <button type="submit" class="btn btn-purple">
+            <i class="bi bi-envelope-paper"></i> Send by Email
+        </button>
+        @Html.AntiForgeryToken()
+    </form>
                         }
                     </div>
                 </div>

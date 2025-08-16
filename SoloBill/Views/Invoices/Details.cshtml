@@ -129,7 +129,13 @@
                     </div>
                 </div>
             </div>
-
+            <form asp-action="SendEmail" asp-controller="Invoices" method="post" class="d-inline">
+    <input type="hidden" name="id" value="@Model.InvoiceId" />
+    <button type="submit" class="btn btn-purple rounded-pill">
+        <i class="bi bi-envelope-paper"></i> Send by Email
+    </button>
+    @Html.AntiForgeryToken()
+</form>
             <a asp-controller="Invoices" asp-action="Index" class="btn btn-outline-primary w-100 mt-3">
                 ← Back to Invoices
             </a>
