@@ -1,4 +1,8 @@
-/* Custom Theme Variables */
+/* ================================
+   SoloBill Theme – site.css
+   ================================ */
+
+/* ---------- CSS Variables ---------- */
 :root {
   --bs-primary: #8a3ffc;
   --bs-secondary: #00cfe8;
@@ -13,32 +17,174 @@
   --bs-body-color: #2d2d2d;
 
   --bs-border-color: #e5e5e5;
-  --bs-font-sans-serif: "Inter", sans-serif;
+  --bs-font-sans-serif: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
 }
 
-/* === Dashboard Layout Custom Styles === */
-body {
-  font-family: "Inter", sans-serif;
-  background-color: #f8f9fa;
-}
+/* ---------- Base ---------- */
 html {
   font-size: 14px;
 }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
 
+body {
+  font-family: var(--bs-font-sans-serif);
+  color: var(--bs-body-color);
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+a {
+  color: var(--bs-primary);
+}
+a:not(.btn):hover {
+  color: #6f2ddc;
+  text-decoration: underline;
+}
+
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.border-top {
+  border-top: 1px solid var(--bs-border-color) !important;
+}
+.border-bottom {
+  border-bottom: 1px solid var(--bs-border-color) !important;
+}
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Navbar / Header ---------- */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-word;
 }
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.4rem;
-}
-.nav-link {
+
+/* keep nav link color scheme subtle */
+.navbar-light .navbar-nav .nav-link {
+  color: var(--bs-primary);
   font-weight: 500;
 }
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus {
+  color: #6f2ddc;
+}
+.navbar-light .navbar-nav .nav-link.active {
+  color: #6f2ddc;
+  font-weight: 600;
+  border-bottom: 2px solid #6f2ddc;
+}
 
-/* Sidebar */
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(138, 63, 252, 0.25);
+  transition: all 0.2s ease;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #7a2de5;
+  border-color: #7a2de5;
+  color: #fff;
+}
+
+.btn-outline-primary {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  transition: all 0.2s ease;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: #fff;
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Ghost (soft) primary – works in navbars & anchors */
+/* Ghost button base */
+a.btn-ghost-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 50rem;
+  border: 1px solid rgba(138, 63, 252, 0.25);
+  background: rgba(138, 63, 252, 0.08);
+  color: var(--bs-primary);
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+/* Ensure nav styles don't win */
+.navbar a.btn-ghost-primary,
+.navbar .nav-link.btn-ghost-primary,
+.navbar a.btn,
+.navbar .nav-link.btn {
+  display: inline-flex !important;
+  text-decoration: none !important;
+}
+
+/* Hover/focus */
+a.btn-ghost-primary:hover,
+a.btn-ghost-primary:focus {
+  color: #fff !important;
+  background: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+}
+
+/* Primary button already looks good, just ensure decoration is off */
+.navbar a.btn-primary {
+  text-decoration: none !important;
+}
+
+.btn-purple {
+  background-color: #8a3ffc;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-purple:hover,
+.btn-purple:focus {
+  background-color: #7a2de5;
+  color: #fff;
+}
+
+.btn-get-started,
+.btn-purple {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(138, 63, 252, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.rounded-pill {
+  border-radius: 50rem !important;
+}
+
+/* ---------- Sidebar (authenticated pages) ---------- */
 .sidebar {
   background: linear-gradient(180deg, var(--bs-primary) 0%, #6f2ddc 100%);
   color: #fff;
@@ -48,7 +194,6 @@ a.navbar-brand {
   padding: 0;
 }
 
-/* Sidebar links */
 .sb-nav .sb-link {
   color: #fff;
   text-decoration: none;
@@ -81,7 +226,6 @@ a.navbar-brand {
   color: var(--bs-primary);
 }
 
-/* Custom dashboard SVG icon */
 .sb-ico {
   width: 18px;
   height: 18px;
@@ -92,137 +236,14 @@ a.navbar-brand {
   fill: currentColor;
 }
 .sb-nav .sb-link:hover .sb-ico {
-  color: #ffffff;
+  color: #fff;
 }
 .sb-nav .sb-link.active .sb-ico {
   color: var(--bs-primary);
 }
 
-/* Section labels */
 .sb-nav .text-white-50 {
   color: rgba(255, 255, 255, 0.7) !important;
-}
-
-a {
-  color: var(--bs-primary);
-}
-
-/* Primary button (Enhanced CTA style) */
-.btn-primary {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
-  font-weight: 600;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(138, 63, 252, 0.25);
-  transition: all 0.2s ease;
-}
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #7a2de5;
-  border-color: #7a2de5;
-}
-
-/* Ghost Primary Button (for Sign In) */
-.btn-ghost-primary {
-  color: var(--bs-primary);
-  background: rgba(138, 63, 252, 0.08);
-  border: 1px solid rgba(138, 63, 252, 0.2);
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-.btn-ghost-primary:hover,
-.btn-ghost-primary:focus {
-  color: #fff;
-  background: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-
-/* Pills & outline buttons */
-.btn-outline-primary {
-  color: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-.btn-outline-primary:hover,
-.btn-outline-primary:focus {
-  color: #fff;
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: var(--bs-primary);
-  border-color: #6f2ddc;
-}
-
-.border-top {
-  border-top: 1px solid var(--bs-border-color);
-}
-.border-bottom {
-  border-bottom: 1px solid var(--bs-border-color);
-}
-
-.box-shadow {
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
-}
-
-.text-primary {
-  color: var(--bs-primary) !important;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
-
-/* Navbar colors */
-.navbar-brand,
-.navbar-light .navbar-nav .nav-link {
-  color: var(--bs-primary);
-}
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link:focus {
-  color: #6f2ddc;
-}
-.navbar-light .navbar-nav .nav-link.active {
-  color: #6f2ddc;
-  font-weight: 600;
-  border-bottom: 2px solid #6f2ddc;
-}
-
-/* Link hover */
-a:hover {
-  color: #6f2ddc;
-  text-decoration: underline;
-}
-
-/* Utility buttons */
-.btn-get-started,
-.btn-purple {
-  background-color: #8a3ffc;
-  color: #fff;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  box-shadow: 0 0.25rem 0.75rem rgba(138, 63, 252, 0.3);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-.btn-get-started:hover,
-.btn-purple:hover {
-  background-color: #7a2de5;
-  transform: translateY(-2px);
-  text-decoration: none;
-  color: #fff;
-}
-
-.rounded-pill {
-  border-radius: 50rem !important;
 }
 
 aside {
@@ -231,27 +252,9 @@ aside {
   height: 100vh;
 }
 
-/* Invoice create page */
-.text-purple {
-  color: #8a3ffc !important;
-}
-.bg-purple {
-  background-color: #8a3ffc !important;
-  color: #fff;
-}
-.btn-purple {
-  background-color: #8a3ffc;
-  color: #fff;
-  border: none;
-}
-.btn-purple:hover {
-  background-color: #7a2de5;
-  color: #fff;
-}
-
+/* ---------- Forms / Focus Ring ---------- */
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
     position: relative;
     min-height: 100%;
   }
@@ -268,6 +271,38 @@ aside {
   .btn-link.nav-link:focus,
   .form-control:focus,
   .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
   }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/* ---------- Invoice Create / Preview ---------- */
+.text-purple {
+  color: #8a3ffc !important;
+}
+.bg-purple {
+  background-color: #8a3ffc !important;
+  color: #fff;
+}
+
+/* invoice table tweaks (optional) */
+.table-sm th,
+.table-sm td {
+  vertical-align: middle;
+}
+
+/* ---------- Utilities ---------- */
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+.me-2 {
+  margin-right: 0.5rem !important;
 }
