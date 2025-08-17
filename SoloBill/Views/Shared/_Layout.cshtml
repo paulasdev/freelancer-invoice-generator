@@ -58,19 +58,69 @@
             </div>
         </nav>
     </header>
-    <!-- Flash messages -->
+    
+<!-- Flash messages -->
 <div class="container mt-3" id="flash-area">
-    @if (TempData["ToastSuccess"] is string s && !string.IsNullOrWhiteSpace(s))
+    @* SUCCESS *@
+    @if (TempData["ToastSuccess"] is string s1 && !string.IsNullOrWhiteSpace(s1))
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-pill px-4" role="alert">
-            <i class="bi bi-check-circle me-2"></i>@s
+        <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-check2-circle"></i> @s1
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    @if (TempData["ToastError"] is string e && !string.IsNullOrWhiteSpace(e))
+    @if (TempData["SuccessMessage"] is string s2 && !string.IsNullOrWhiteSpace(s2))
     {
-        <div class="alert alert-warning alert-dismissible fade show shadow-sm rounded-pill px-4" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>@e
+        <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-check2-circle"></i> @s2
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @* WARNING*@
+    @if (TempData["ToastWarning"] is string w1 && !string.IsNullOrWhiteSpace(w1))
+    {
+        <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @w1
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["WarningMessage"] is string w2 && !string.IsNullOrWhiteSpace(w2))
+    {
+        <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @w2
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @* INFO*@
+    @if (TempData["ToastInfo"] is string i1 && !string.IsNullOrWhiteSpace(i1))
+    {
+        <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-info-circle"></i> @i1
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["InfoMessage"] is string i2 && !string.IsNullOrWhiteSpace(i2))
+    {
+        <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-info-circle"></i> @i2
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @* ERROR*@
+    @if (TempData["ToastError"] is string e1 && !string.IsNullOrWhiteSpace(e1))
+    {
+        <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-x-circle"></i> @e1
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is string e2 && !string.IsNullOrWhiteSpace(e2))
+    {
+        <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
+            <i class="bi bi-x-circle"></i> @e2
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
