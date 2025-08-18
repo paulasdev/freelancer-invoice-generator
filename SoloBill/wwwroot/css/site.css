@@ -1,10 +1,21 @@
-/* Custom Theme Variables */
+/* ================================
+   SoloBill Theme – site.css
+   Brand: Purple (#8a3ffc) / Teal (#00cfe8)
+   No red variants
+   ================================ */
+
+/* ---------- CSS Variables ---------- */
 :root {
-  --bs-primary: #8a3ffc;
-  --bs-secondary: #00cfe8;
+  /* Brand */
+  --brand-primary: #8a3ffc;
+  --brand-primary-2: #6f2ddc;
+  --brand-secondary: #00cfe8;
+
+  /* Bootstrap overrides */
+  --bs-primary: var(--brand-primary);
+  --bs-secondary: var(--brand-secondary);
   --bs-success: #28c76f;
   --bs-info: #00cfe8;
-  --bs-danger: #ea5455;
   --bs-warning: #ffc107;
   --bs-light: #f8f9fa;
   --bs-dark: #2d2d2d;
@@ -13,42 +24,302 @@
   --bs-body-color: #2d2d2d;
 
   --bs-border-color: #e5e5e5;
-  --bs-font-sans-serif: "Inter", sans-serif;
+  --bs-font-sans-serif: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+
+  /* Buttons */
+  --btn-radius: 9999px;
+  --btn-pad-y: 0.58rem;
+  --btn-pad-x: 1.1rem;
+  --btn-shadow: 0 6px 18px rgba(138, 63, 252, 0.22);
+  --btn-shadow-hover: 0 10px 24px rgba(138, 63, 252, 0.28);
+
+  /* Neutral tones */
+  --brand-gray-700: #3a3a3a;
+  --brand-gray-500: #6b7280;
+  --brand-gray-300: #e5e7eb;
 }
 
-/* === Dashboard Layout Custom Styles === */
-body {
-  font-family: "Inter", sans-serif;
-  background-color: #f8f9fa;
-}
+/* ---------- Base ---------- */
 html {
   font-size: 14px;
 }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
 
+body {
+  font-family: var(--bs-font-sans-serif);
+  color: var(--bs-body-color);
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+a {
+  color: var(--bs-primary);
+}
+a:not(.btn):hover {
+  color: #6f2ddc;
+  text-decoration: underline;
+}
+
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.border-top {
+  border-top: 1px solid var(--bs-border-color) !important;
+}
+.border-bottom {
+  border-bottom: 1px solid var(--bs-border-color) !important;
+}
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Navbar / Header ---------- */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-word;
 }
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.4rem;
-}
-.nav-link {
+
+.navbar-light .navbar-nav .nav-link {
+  color: var(--bs-primary);
   font-weight: 500;
 }
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus {
+  color: #6f2ddc;
+}
+.navbar-light .navbar-nav .nav-link.active {
+  color: #6f2ddc;
+  font-weight: 600;
+  border-bottom: 2px solid #6f2ddc;
+}
 
-/* Sidebar */
+.navbar .nav-link.btn,
+.navbar a.btn {
+  border-bottom: none !important;
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  transition: transform 0.15s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    filter 0.2s ease;
+  font-weight: 600;
+  border-radius: var(--btn-radius);
+  padding: var(--btn-pad-y) var(--btn-pad-x);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn:active {
+  transform: translateY(0) scale(0.99);
+}
+.btn i,
+.btn svg {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Primary CTA (Register, Save) */
+.btn-primary,
+.btn-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--brand-primary) 0%,
+    var(--brand-primary-2) 100%
+  );
+  border: 1px solid rgba(138, 63, 252, 0.2);
+  color: #fff !important;
+  box-shadow: var(--btn-shadow);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-gradient:hover,
+.btn-gradient:focus {
+  filter: brightness(1.04);
+  box-shadow: var(--btn-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* Ghost Primary (Sign In) */
+.btn-ghost-primary {
+  background: rgba(138, 63, 252, 0.1);
+  border: 1px solid rgba(138, 63, 252, 0.28);
+  color: var(--brand-primary) !important;
+}
+.btn-ghost-primary:hover,
+.btn-ghost-primary:focus {
+  background: rgba(138, 63, 252, 0.18);
+  border-color: rgba(138, 63, 252, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Outline Primary (Dashboard, Back) */
+.btn-outline-primary {
+  border: 1px solid var(--brand-primary);
+  color: var(--brand-primary) !important;
+  background: transparent;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background: var(--brand-primary);
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: var(--btn-shadow);
+}
+
+/* Neutral Outline */
+.btn-outline-neutral {
+  border: 1.5px solid var(--brand-gray-300);
+  color: var(--brand-gray-700) !important;
+  background: transparent;
+}
+.btn-outline-neutral:hover,
+.btn-outline-neutral:focus {
+  background: #f3f4f6;
+  border-color: var(--brand-gray-500);
+  color: var(--brand-gray-700) !important;
+  transform: translateY(-1px);
+}
+
+/* Softer outline*/
+.btn-outline-purple {
+  border: 1.5px solid rgba(138, 63, 252, 0.35);
+  background: #fff;
+  color: rgba(123, 56, 223, 0.35);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border-radius: 0.5rem;
+}
+.btn-outline-purple:hover,
+.btn-outline-purple:focus {
+  background: #fff;
+  color: rgba(123, 56, 223, 0.35);
+  border-color: var(--solo-purple);
+}
+
+/* Soft Secondary */
+.btn-soft-secondary {
+  background: rgba(0, 207, 232, 0.1);
+  color: #00a7bf !important;
+  border: 1px solid rgba(0, 207, 232, 0.25);
+}
+.btn-soft-secondary:hover,
+.btn-soft-secondary:focus {
+  background: rgba(0, 207, 232, 0.18);
+  border-color: rgba(0, 207, 232, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-outline-danger,
+.btn-danger {
+  display: none !important;
+}
+
+/* Focus ring (accessible) */
+.btn:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 3px rgba(138, 63, 252, 0.35);
+}
+
+/* Legacy utility  */
+.btn-purple {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border: none;
+}
+.btn-purple:hover,
+.btn-purple:focus {
+  background-color: #7a2de5;
+  color: #fff;
+}
+.btn-get-started,
+.btn-purple {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(138, 63, 252, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* --- SoloBill Alerts --- */
+.alert-sb {
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+/* Solid brand purple (success/ok) */
+.alert-sb-primary {
+  background-color: #8a3ffc; /* brand */
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(138, 63, 252, 0.25);
+}
+.alert-sb-primary .btn-close {
+  filter: invert(1);
+  opacity: 0.9;
+}
+
+/* Soft warning (amber) – no red */
+.alert-sb-warning {
+  background: #fff6e6;
+  color: #7a5a00;
+  box-shadow: 0 6px 18px rgba(255, 193, 7, 0.18);
+}
+
+/* Soft info (cyan) */
+.alert-sb-info {
+  background: #e8fbff;
+  color: #0a5b66;
+  box-shadow: 0 6px 18px rgba(0, 207, 232, 0.18);
+}
+
+/* Soft error without red (deep purple outline vibe) */
+.alert-sb-error {
+  background: #f4efff;
+  color: #3a2a6a;
+  box-shadow: 0 6px 18px rgba(138, 63, 252, 0.12);
+}
+
+/* spacing container */
+#flash-area > .alert {
+  margin-bottom: 0.75rem;
+}
+
+/* ---------- Sidebar (authenticated pages) ---------- */
 .sidebar {
-  background: linear-gradient(180deg, var(--bs-primary) 0%, #6f2ddc 100%);
+  background: linear-gradient(
+    180deg,
+    var(--brand-primary) 0%,
+    var(--brand-primary-2) 100%
+  );
   color: #fff;
   min-height: calc(100vh - 64px);
   position: sticky;
   top: 5px;
   padding: 0;
 }
-
-/* Sidebar links */
 .sb-nav .sb-link {
   color: #fff;
   text-decoration: none;
@@ -73,15 +344,14 @@ a.navbar-brand {
 }
 .sb-nav .sb-link.active {
   background: #fff;
-  color: var(--bs-primary);
+  color: var(--brand-primary);
   font-weight: 600;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 .sb-nav .sb-link.active i {
-  color: var(--bs-primary);
+  color: var(--brand-primary);
 }
 
-/* Custom dashboard SVG icon */
 .sb-ico {
   width: 18px;
   height: 18px;
@@ -92,137 +362,13 @@ a.navbar-brand {
   fill: currentColor;
 }
 .sb-nav .sb-link:hover .sb-ico {
-  color: #ffffff;
+  color: #fff;
 }
 .sb-nav .sb-link.active .sb-ico {
-  color: var(--bs-primary);
+  color: var(--brand-primary);
 }
-
-/* Section labels */
 .sb-nav .text-white-50 {
   color: rgba(255, 255, 255, 0.7) !important;
-}
-
-a {
-  color: var(--bs-primary);
-}
-
-/* Primary button (Enhanced CTA style) */
-.btn-primary {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
-  font-weight: 600;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(138, 63, 252, 0.25);
-  transition: all 0.2s ease;
-}
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #7a2de5;
-  border-color: #7a2de5;
-}
-
-/* Ghost Primary Button (for Sign In) */
-.btn-ghost-primary {
-  color: var(--bs-primary);
-  background: rgba(138, 63, 252, 0.08);
-  border: 1px solid rgba(138, 63, 252, 0.2);
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-.btn-ghost-primary:hover,
-.btn-ghost-primary:focus {
-  color: #fff;
-  background: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-
-/* Pills & outline buttons */
-.btn-outline-primary {
-  color: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-.btn-outline-primary:hover,
-.btn-outline-primary:focus {
-  color: #fff;
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
-}
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: var(--bs-primary);
-  border-color: #6f2ddc;
-}
-
-.border-top {
-  border-top: 1px solid var(--bs-border-color);
-}
-.border-bottom {
-  border-bottom: 1px solid var(--bs-border-color);
-}
-
-.box-shadow {
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
-}
-
-.text-primary {
-  color: var(--bs-primary) !important;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
-
-/* Navbar colors */
-.navbar-brand,
-.navbar-light .navbar-nav .nav-link {
-  color: var(--bs-primary);
-}
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link:focus {
-  color: #6f2ddc;
-}
-.navbar-light .navbar-nav .nav-link.active {
-  color: #6f2ddc;
-  font-weight: 600;
-  border-bottom: 2px solid #6f2ddc;
-}
-
-/* Link hover */
-a:hover {
-  color: #6f2ddc;
-  text-decoration: underline;
-}
-
-/* Utility buttons */
-.btn-get-started,
-.btn-purple {
-  background-color: #8a3ffc;
-  color: #fff;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  box-shadow: 0 0.25rem 0.75rem rgba(138, 63, 252, 0.3);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-.btn-get-started:hover,
-.btn-purple:hover {
-  background-color: #7a2de5;
-  transform: translateY(-2px);
-  text-decoration: none;
-  color: #fff;
-}
-
-.rounded-pill {
-  border-radius: 50rem !important;
 }
 
 aside {
@@ -231,27 +377,9 @@ aside {
   height: 100vh;
 }
 
-/* Invoice create page */
-.text-purple {
-  color: #8a3ffc !important;
-}
-.bg-purple {
-  background-color: #8a3ffc !important;
-  color: #fff;
-}
-.btn-purple {
-  background-color: #8a3ffc;
-  color: #fff;
-  border: none;
-}
-.btn-purple:hover {
-  background-color: #7a2de5;
-  color: #fff;
-}
-
+/* ---------- Forms / Focus Ring ---------- */
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
     position: relative;
     min-height: 100%;
   }
@@ -268,6 +396,38 @@ aside {
   .btn-link.nav-link:focus,
   .form-control:focus,
   .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
   }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/* ---------- Invoice Create / Preview ---------- */
+.text-purple {
+  color: var(--brand-primary) !important;
+}
+.bg-purple {
+  background-color: var(--brand-primary) !important;
+  color: #fff;
+}
+
+/* invoice table tweaks (optional) */
+.table-sm th,
+.table-sm td {
+  vertical-align: middle;
+}
+
+/* ---------- Utilities ---------- */
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+.me-2 {
+  margin-right: 0.5rem !important;
 }

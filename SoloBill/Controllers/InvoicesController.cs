@@ -14,20 +14,22 @@ using SoloBill.Models;
 
 namespace SoloBill.Controllers
 {
-
+    [Authorize]
     public class InvoicesController : Controller
     {
         private readonly SoloBillDbContext _context;
         private readonly InvoicePdfService _pdfService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
+        private readonly IEmailService _email;
 
-        public InvoicesController(SoloBillDbContext context, InvoicePdfService pdfService, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
+        public InvoicesController(SoloBillDbContext context, InvoicePdfService pdfService, UserManager<ApplicationUser> userManager, IWebHostEnvironment env, IEmailService email)
         {
             _context = context;
             _pdfService = pdfService;
             _userManager = userManager;
             _env = env;
+            _email = email;
         }
 
         // GET: Invoices
@@ -317,6 +319,75 @@ namespace SoloBill.Controllers
         {
             return _context.Invoices.Any(e => e.InvoiceId == id);
         }
+
+        //Send invoice by email
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> SendEmail(int id)
+{
+    var user = await _userManager.GetUserAsync(User);
+    if (user is null) return Unauthorized();
+
+    var invoice = await _context.Invoices
+        .Include(i => i.Client)
+        .Include(i => i.Items)
+        .FirstOrDefaultAsync(i => i.InvoiceId == id && i.UserId == user.Id);
+
+    if (invoice is null) return NotFound();
+
+    if (string.IsNullOrWhiteSpace(invoice.Client?.Email))
+    {
+        TempData["ToastError"] = "Client has no email address.";
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    try
+    {
+        var vm = new InvoiceViewModel
+        {
+            Invoice = invoice,
+            Client = invoice.Client!,
+            Items = invoice.Items.ToList(),
+            CompanyName = user.CompanyName,
+            Address = user.Address,
+            CompanyPhone = user.CompanyPhone,
+            Email = user.Email,
+            BankName = user.BankName,
+            IBAN = user.IBAN,
+            BIC = user.BIC,
+            Notes = invoice.Notes,
+            LogoPath = Path.Combine(_env.WebRootPath, "uploads", user.LogoPath ?? "")
+        };
+
+        var pdfBytes = _pdfService.GeneratePdf(vm);
+
+        var subject = $"Invoice {invoice.InvoiceNumber ?? invoice.InvoiceId.ToString()} from {user.CompanyName}";
+        var greeting = !string.IsNullOrWhiteSpace(invoice.Client?.Name)
+            ? invoice.Client!.Name
+            : invoice.Client?.Company;
+        var htmlBody = $@"
+            <p>Hi {greeting},</p>
+            <p>Please find attached <strong>Invoice {invoice.InvoiceNumber ?? invoice.InvoiceId.ToString()}</strong>
+            from <strong>{user.CompanyName}</strong>.</p>
+            <p>Thank you!</p>";
+
+        await _email.SendInvoiceAsync(
+            toEmail: invoice.Client!.Email!,
+            subject: subject,
+            htmlBody: htmlBody,
+            pdfBytes: pdfBytes,
+            pdfFileName: $"Invoice_{invoice.InvoiceNumber ?? invoice.InvoiceId.ToString()}.pdf"
+        );
+
+        TempData["ToastSuccess"] = $"Invoice {invoice.InvoiceNumber ?? invoice.InvoiceId.ToString()} was successfully sent to {invoice.Client.Email}.";
+    }
+    catch (Exception ex)
+    {
+        TempData["ToastError"] = $"Failed to send invoice: {ex.Message}";
+    }
+
+    return RedirectToAction(nameof(Details), new { id });
+}
 
     }
 }

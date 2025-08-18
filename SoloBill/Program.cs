@@ -37,6 +37,10 @@ builder.Services.AddAuthorization();
 // PDF service
 builder.Services.AddScoped<InvoicePdfService>();
 
+//Email
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -50,6 +54,9 @@ else
     app.UseExceptionHandler("/Error/500");    
     app.UseHsts();
 }
+
+
+
 
 var cultureInfo = new CultureInfo("en-IE");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;

@@ -27,7 +27,13 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index() => View();
+    public IActionResult Index()
+    {
+        if (User?.Identity?.IsAuthenticated == true)
+            return RedirectToAction("Index", "Dashboard");
+
+        return View();
+    }
 
     [AllowAnonymous]
     [HttpGet("/demo")]
