@@ -36,15 +36,15 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ### Dashboard
 
-![Dashboard](/screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard.png)
 
 ### Invoice Form & Preview
 
-![Invoice Form](/screenshots/invoice-form.png)
+![Invoice Form](screenshots/invoice-form.png)
 
 ### Invoice PDF
 
-![Invoice PDF](/screenshots/invoice-pdf.png)
+![Invoice PDF](screenshots/invoice-pdf.png)
 
 ---
 
