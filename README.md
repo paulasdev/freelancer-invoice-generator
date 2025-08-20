@@ -50,7 +50,7 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ## Demo Video
 
-## [![Watch the Demo](screenshots/demo-thumbnail.png)](https://raw.githubusercontent.com/paulasdev/freelancer-invoice-generator/main/assets/demo-small.mp4)
+[![Watch the Demo](screenshots/demo-thumbnail.png)](https://raw.githubusercontent.com/paulasdev/freelancer-invoice-generator/main/assets/demo-small.mp4)
 
 ## Future Enhancements
 
