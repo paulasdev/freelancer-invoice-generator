@@ -36,21 +36,21 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ### Dashboard
 
-![Dashboard](assets/4.png)
+![Dashboard](screenshots/dashboard.png)
 
 ### Invoice Form & Preview
 
-![Invoice Form](assets/6.png)
+![Invoice Form](screenshots/invoice-form.png)
 
 ### Invoice PDF
 
-![Invoice PDF](assets/7.png)
+![Invoice PDF](screenshots/invoice-pdf.png)
 
 ---
 
 ## Demo Video
 
-[![Watch the Demo](assets/demo-thumbnail.png)](assets/demo.mp4)
+[![Watch the Demo](screenshots/demo-thumbnail.png)](assets/demo.mp4)
 
 ---
 
