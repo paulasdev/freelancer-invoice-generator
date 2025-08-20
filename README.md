@@ -50,7 +50,13 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ## Demo Video
 
+<video src="https://raw.githubusercontent.com/paulasdev/freelancer-invoice-generator/main/assets/demo-small.mp4" width="700" autoplay loop muted controls>
+  Your browser does not support the video tag.
+</video>
+
 [![Watch the Demo](screenshots/demo-thumbnail.png)](https://raw.githubusercontent.com/paulasdev/freelancer-invoice-generator/main/assets/demo-small.mp4)
+
+---
 
 ## Future Enhancements
 
