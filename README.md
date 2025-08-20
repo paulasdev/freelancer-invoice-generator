@@ -50,7 +50,7 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ## Demo Video
 
-[![Watch the Demo](/screenshots/demo-thumbnail.png)](/assets/demo.mp4)
+[![Watch the Demo](screenshots/demo-thumbnail.png)](assets/demo.mp4)
 
 ---
 
