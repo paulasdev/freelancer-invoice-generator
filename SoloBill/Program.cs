@@ -17,24 +17,20 @@ builder.Services.AddDbContext<SoloBillDbContext>(options =>
     }
     else
     {
-        var sqlServer = builder.Configuration.GetConnectionString("SoloBillDbContext")
-                      ?? throw new InvalidOperationException(
-                          "Connection string 'SoloBillDbContext' not found.");
-        options.UseSqlServer(sqlServer);
+        var pg = builder.Configuration.GetConnectionString("SoloBillDbContext")
+                 ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+                 ?? throw new InvalidOperationException("Postgres connection string not found.");
+        options.UseNpgsql(pg);
     }
 });
-    
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
 })
 .AddEntityFrameworkStores<SoloBillDbContext>();
-
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -45,34 +41,30 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthorization();
 
-// PDF service
+// PDF + Email
 builder.Services.AddScoped<InvoicePdfService>();
-
-//Email
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
 builder.Services.AddSingleton<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-+// Auto-apply EF Core migrations at startup (esp. useful in Production)
-+using (var scope = app.Services.CreateScope())
-+{
-+    var db = scope.ServiceProvider.GetRequiredService<SoloBillDbContext>();
-+    db.Database.Migrate();
-+}
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SoloBillDbContext>();
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();           
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
     app.UseStatusCodePagesWithReExecute("/Error/{0}");
 }
 else
 {
-    app.UseExceptionHandler("/Error/500");    
+    app.UseExceptionHandler("/Error/500");
     app.UseHsts();
 }
-
 
 var cultureInfo = new CultureInfo("en-IE");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -80,16 +72,13 @@ CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.MapRazorPages();
 
 app.Run();

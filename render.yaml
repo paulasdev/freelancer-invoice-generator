@@ -10,8 +10,9 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__SoloBillDbContext
-        value: Data Source=/var/data/solobill.db
-    disk:
-      name: data
-      mountPath: /var/data
-      sizeGB: 1
+        fromDatabase:
+          name: solobill-db
+
+databases:
+  - name: solobill-db
+    plan: free
