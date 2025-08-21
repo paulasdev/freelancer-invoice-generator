@@ -1,7 +1,7 @@
 services:
   - type: web
     name: solobill
-    env: node
+    env: dotnet
     buildCommand: "dotnet publish -c Release -o out"
     startCommand: "dotnet out/SoloBill.dll"
     autoDeploy: true
@@ -10,8 +10,7 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__SoloBillDbContext
-        fromDatabase:
-          name: solobill-db
+        fromDatabaseId: solobill-db
 
 databases:
   - name: solobill-db
