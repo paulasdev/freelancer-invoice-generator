@@ -54,6 +54,13 @@ builder.Services.AddSingleton<IEmailService, EmailService>();
 
 var app = builder.Build();
 
++// Auto-apply EF Core migrations at startup (esp. useful in Production)
++using (var scope = app.Services.CreateScope())
++{
++    var db = scope.ServiceProvider.GetRequiredService<SoloBillDbContext>();
++    db.Database.Migrate();
++}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();           
