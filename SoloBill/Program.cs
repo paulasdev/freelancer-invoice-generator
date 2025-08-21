@@ -7,12 +7,23 @@ using SoloBill.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-var connectionString = builder.Configuration.GetConnectionString("SoloBillDbContext")
-    ?? throw new InvalidOperationException("Connection string 'SoloBillDbContext' not found.");
-
 builder.Services.AddDbContext<SoloBillDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        var sqlite = builder.Configuration.GetConnectionString("SoloBillSqlite")
+                     ?? "Data Source=solobill.db";
+        options.UseSqlite(sqlite);
+    }
+    else
+    {
+        var sqlServer = builder.Configuration.GetConnectionString("SoloBillDbContext")
+                      ?? throw new InvalidOperationException(
+                          "Connection string 'SoloBillDbContext' not found.");
+        options.UseSqlServer(sqlServer);
+    }
+});
+    
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -54,8 +65,6 @@ else
     app.UseExceptionHandler("/Error/500");    
     app.UseHsts();
 }
-
-
 
 
 var cultureInfo = new CultureInfo("en-IE");
