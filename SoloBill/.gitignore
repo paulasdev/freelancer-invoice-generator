@@ -437,3 +437,7 @@ obj/
 # macOS
 **/.DS_Store
 *.db
+
+# SQLite
+*.db-shm
+*.db-wal

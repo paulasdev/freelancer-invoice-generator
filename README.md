@@ -58,6 +58,18 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ---
 
+## Live Demo
+
+(coming soon) https://solobill.onrender.com
+
+## Deploy
+
+This repo includes a `render.yaml` blueprint. Connect the repo on Render → New → Blueprint → pick this repo.  
+Render will build with `dotnet publish` and run with `dotnet out/SoloBill.dll`.  
+The app auto-applies EF migrations on startup and uses a persistent disk for the SQLite DB.
+
+---
+
 ## Future Enhancements
 
 - Add VAT and discount options for invoices
