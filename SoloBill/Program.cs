@@ -15,13 +15,19 @@ builder.Services.AddDbContext<SoloBillDbContext>(options =>
                      ?? "Data Source=solobill.db";
         options.UseSqlite(sqlite);
     }
-    else
-    {
-        var pg = builder.Configuration.GetConnectionString("SoloBillDbContext")
-                 ?? Environment.GetEnvironmentVariable("DATABASE_URL")
-                 ?? throw new InvalidOperationException("Postgres connection string not found.");
-        options.UseNpgsql(pg);
-    }
+else
+{
+    var raw = builder.Configuration.GetConnectionString("SoloBillDbContext")
+              ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+              ?? throw new InvalidOperationException("Postgres connection string not found.");
+
+    var databaseUrl = new Uri(raw);
+    var userInfo = databaseUrl.UserInfo.Split(':');
+
+    var pgConn = $"Host={databaseUrl.Host};Port={databaseUrl.Port};Database={databaseUrl.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
+
+    options.UseNpgsql(pgConn);
+}
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

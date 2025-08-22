@@ -4,13 +4,15 @@ services:
     env: docker
     plan: free
     autoDeploy: true
+    healthCheckPath: /
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__SoloBillDbContext
         fromDatabase:
           name: solobill-db
-    healthCheckPath: /
+          property: connectionString
 
 databases:
   - name: solobill-db
