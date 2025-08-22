@@ -80,8 +80,8 @@ namespace SoloBill.Controllers
             {
                 invoice = new Invoice
                 {
-                    IssueDate = DateTime.Today,
-                    DueDate = DateTime.Today.AddDays(7)
+                    IssueDate = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc),
+                    DueDate   = DateTime.SpecifyKind(DateTime.Today.AddDays(7), DateTimeKind.Utc)
                 };
             }
 
@@ -185,6 +185,9 @@ namespace SoloBill.Controllers
 
             viewModel.Invoice.Notes = viewModel.Notes?.Trim();
 
+            viewModel.Invoice.IssueDate = DateTime.SpecifyKind(viewModel.Invoice.IssueDate.Date, DateTimeKind.Utc);
+            viewModel.Invoice.DueDate   = DateTime.SpecifyKind(viewModel.Invoice.DueDate.Date,   DateTimeKind.Utc);
+
             // 1. Calculate invoice total
             viewModel.Invoice.Amount = viewModel.Items.Sum(i => i.Quantity * i.UnitPrice);
 
@@ -235,8 +238,8 @@ namespace SoloBill.Controllers
                 {
                     // Update fields securely
                     invoice.ClientId = updatedInvoice.ClientId;
-                    invoice.IssueDate = updatedInvoice.IssueDate;
-                    invoice.DueDate = updatedInvoice.DueDate;
+                    invoice.IssueDate = DateTime.SpecifyKind(updatedInvoice.IssueDate.Date, DateTimeKind.Utc); 
+                    invoice.DueDate   = DateTime.SpecifyKind(updatedInvoice.DueDate.Date,   DateTimeKind.Utc); 
                     invoice.Amount = updatedInvoice.Amount;
                     invoice.IsPaid = updatedInvoice.IsPaid;
 
