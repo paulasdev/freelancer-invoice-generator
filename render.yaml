@@ -2,7 +2,6 @@ services:
   - type: web
     name: solobill
     env: docker
-    dockerfilePath: ./Dockerfile
     plan: free
     autoDeploy: true
     envVars:
@@ -11,7 +10,7 @@ services:
       - key: ConnectionStrings__SoloBillDbContext
         fromDatabase:
           name: solobill-db
-          property: connectionString
+    healthCheckPath: /
 
 databases:
   - name: solobill-db
