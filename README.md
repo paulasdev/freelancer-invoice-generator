@@ -60,7 +60,7 @@ This project was built as part of my portfolio to demonstrate full-stack develop
 
 ## Live Demo
 
-(coming soon) https://solobill.onrender.com
+https://solobill.onrender.com
 
 ## Deploy
 

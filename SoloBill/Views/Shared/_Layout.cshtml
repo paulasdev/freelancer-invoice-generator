@@ -17,19 +17,27 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+
+    @RenderSection("Head", required: false)
 </head>
 <body>
     <!-- Top Navbar -->
     <header>
+        <!-- Use navbar-light so the hamburger icon is visible on light bg -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="/">
                     <img src="~/images/solobill-logo.png" alt="SoloBill Logo" style="height: 40px;" class="me-2" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+                <!-- Mobile toggle -->
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+                <!-- Collapsible area -->
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <div class="d-flex align-items-center gap-3 py-3 py-lg-0">
                         @if (SignInManager.IsSignedIn(User))
@@ -39,7 +47,7 @@
                                   asp-page="/Account/Logout"
                                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
                                   class="d-inline">
-                                <button type="submit" class="btn btn-outline-neutral rounded-pill px-4 py-2">
+                                <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 py-2">
                                     Log out
                                 </button>
                             </form>
@@ -58,78 +66,78 @@
             </div>
         </nav>
     </header>
-    
-<!-- Flash messages -->
-<div class="container mt-3" id="flash-area">
-    @* SUCCESS *@
-    @if (TempData["ToastSuccess"] is string s1 && !string.IsNullOrWhiteSpace(s1))
-    {
-        <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-check2-circle"></i> @s1
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-    @if (TempData["SuccessMessage"] is string s2 && !string.IsNullOrWhiteSpace(s2))
-    {
-        <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-check2-circle"></i> @s2
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
 
-    @* WARNING*@
-    @if (TempData["ToastWarning"] is string w1 && !string.IsNullOrWhiteSpace(w1))
-    {
-        <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> @w1
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-    @if (TempData["WarningMessage"] is string w2 && !string.IsNullOrWhiteSpace(w2))
-    {
-        <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> @w2
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+    <!-- Flash messages -->
+    <div class="container mt-3" id="flash-area">
+        @* SUCCESS *@
+        @if (TempData["ToastSuccess"] is string s1 && !string.IsNullOrWhiteSpace(s1))
+        {
+            <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-check2-circle"></i> @s1
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["SuccessMessage"] is string s2 && !string.IsNullOrWhiteSpace(s2))
+        {
+            <div class="alert alert-sb alert-sb-primary alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-check2-circle"></i> @s2
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-    @* INFO*@
-    @if (TempData["ToastInfo"] is string i1 && !string.IsNullOrWhiteSpace(i1))
-    {
-        <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-info-circle"></i> @i1
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-    @if (TempData["InfoMessage"] is string i2 && !string.IsNullOrWhiteSpace(i2))
-    {
-        <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-info-circle"></i> @i2
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+        @* WARNING *@
+        @if (TempData["ToastWarning"] is string w1 && !string.IsNullOrWhiteSpace(w1))
+        {
+            <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> @w1
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["WarningMessage"] is string w2 && !string.IsNullOrWhiteSpace(w2))
+        {
+            <div class="alert alert-sb alert-sb-warning alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> @w2
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-    @* ERROR*@
-    @if (TempData["ToastError"] is string e1 && !string.IsNullOrWhiteSpace(e1))
-    {
-        <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-x-circle"></i> @e1
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-    @if (TempData["ErrorMessage"] is string e2 && !string.IsNullOrWhiteSpace(e2))
-    {
-        <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
-            <i class="bi bi-x-circle"></i> @e2
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-</div>
+        @* INFO *@
+        @if (TempData["ToastInfo"] is string i1 && !string.IsNullOrWhiteSpace(i1))
+        {
+            <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-info-circle"></i> @i1
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["InfoMessage"] is string i2 && !string.IsNullOrWhiteSpace(i2))
+        {
+            <div class="alert alert-sb alert-sb-info alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-info-circle"></i> @i2
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @* ERROR *@
+        @if (TempData["ToastError"] is string e1 && !string.IsNullOrWhiteSpace(e1))
+        {
+            <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-x-circle"></i> @e1
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] is string e2 && !string.IsNullOrWhiteSpace(e2))
+        {
+            <div class="alert alert-sb alert-sb-error alert-dismissible fade show px-4" role="alert">
+                <i class="bi bi-x-circle"></i> @e2
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
 
     <!-- Page Content -->
     <div class="container-fluid">
         <div class="row g-0">
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity?.IsAuthenticated == true)
             {
                 <aside class="col-lg-2 sidebar border-end d-none d-lg-block">
                     <nav class="sb-nav d-flex flex-column h-100" aria-label="Primary">
@@ -182,7 +190,7 @@
                 </aside>
             }
 
-            <main class="@(User.Identity.IsAuthenticated ? "col-lg-10" : "col-12") pt-2 px-4 pb-4">
+            <main class="@(User.Identity?.IsAuthenticated == true ? "col-lg-10" : "col-12") pt-2 px-4 pb-4">
                 @RenderBody()
             </main>
         </div>
@@ -195,20 +203,22 @@
         </div>
     </footer>
 
-    @RenderSection("Scripts", required: false)
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-  // Auto-dismiss alerts after 4s
-  window.addEventListener('load', () => {
-    const alerts = document.querySelectorAll('.alert');
-    setTimeout(() => {
-      alerts.forEach(a => {
-        const bsAlert = bootstrap.Alert.getOrCreateInstance(a);
-        bsAlert.close();
-      });
-    }, 4000);
-  });
-</script>
+        // Auto-dismiss alerts after 4s
+        window.addEventListener('load', () => {
+            const alerts = document.querySelectorAll('.alert');
+            setTimeout(() => {
+                alerts.forEach(a => {
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(a);
+                    bsAlert.close();
+                });
+            }, 4000);
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
