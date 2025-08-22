@@ -1,0 +1,33 @@
+cat > .dockerignore <<'EOF'
+# build output
+bin/
+obj/
+**/bin/
+**/obj/
+
+# user + IDE
+.vscode/
+.vs/
+*.user
+*.suo
+*.swp
+*.DS_Store
+
+# node (if any)
+node_modules/
+
+# local dbs & secrets
+*.db
+*.db-shm
+*.db-wal
+app.db
+.env
+secrets.json
+
+# git
+.git
+.gitignore
+
+# other
+**/Logs/
+EOF
