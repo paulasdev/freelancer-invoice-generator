@@ -4,6 +4,7 @@ using SoloBill.Data;
 using SoloBill.Services;
 using System.Globalization;
 using SoloBill.Models;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
