@@ -22,10 +22,39 @@ else
               ?? Environment.GetEnvironmentVariable("DATABASE_URL")
               ?? throw new InvalidOperationException("Postgres connection string not found.");
 
-    var databaseUrl = new Uri(raw);
-    var userInfo = databaseUrl.UserInfo.Split(':');
+    string pgConn;
 
-    var pgConn = $"Host={databaseUrl.Host};Port={databaseUrl.Port};Database={databaseUrl.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
+    if (raw.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+        raw.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        var uri = new Uri(raw);
+
+       
+        var userInfo = uri.UserInfo.Split(':', 2);
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+
+        var b = new Npgsql.NpgsqlConnectionStringBuilder
+        {
+            Host = uri.Host,
+            Port = uri.IsDefaultPort ? 5432 : uri.Port,
+            Database = uri.AbsolutePath.TrimStart('/'),
+            Username = username,
+            Password = password,
+            SslMode = Npgsql.SslMode.Require,
+            TrustServerCertificate = true
+        };
+
+        pgConn = b.ToString();
+    }
+    else
+    {
+     
+        var b = new Npgsql.NpgsqlConnectionStringBuilder(raw);
+        if (b.SslMode == Npgsql.SslMode.Disable) b.SslMode = Npgsql.SslMode.Require;
+        b.TrustServerCertificate = true;
+        pgConn = b.ToString();
+    }
 
     options.UseNpgsql(pgConn);
 }
