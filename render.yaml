@@ -1,16 +1,17 @@
 services:
   - type: web
     name: solobill
-    env: dotnet
-    buildCommand: "dotnet publish -c Release -o out"
-    startCommand: "dotnet out/SoloBill.dll"
-    autoDeploy: true
+    env: docker
+    dockerfilePath: ./Dockerfile
     plan: free
+    autoDeploy: true
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__SoloBillDbContext
-        fromDatabaseId: solobill-db
+        fromDatabase:
+          name: solobill-db
+          property: connectionString
 
 databases:
   - name: solobill-db
