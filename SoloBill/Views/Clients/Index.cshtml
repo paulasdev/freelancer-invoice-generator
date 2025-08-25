@@ -16,88 +16,89 @@
         <span class="input-group-text"><i class="fas fa-search"></i></span>
     </div>
 
+    <!-- Table (desktop same; mobile cards) -->
     <div class="table-responsive" style="max-height:60vh; overflow:auto;">
-  <table class="table table-hover bg-white shadow-sm rounded table-mobile" id="clientTable">
-    <thead class="table-light position-sticky top-0" style="z-index:1;">
-      <tr>
-        <th class="sortable" onclick="sortTable(0)">Contact</th>
-        <th class="sortable" onclick="sortTable(1)">Email</th>
-        <th class="sortable" onclick="sortTable(2)">Company</th>
-        <th class="sortable" onclick="sortTable(3)">Address</th>
-        <th class="sortable" onclick="sortTable(4)"># Invoices</th>
-        <th class="text-end">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var client in Model)
-      {
-        <tr>
-          <td data-label="Contact">@client.Name</td>
-          <td data-label="Email" class="text-truncate-2">@client.Email</td>
-          <td data-label="Company" class="text-truncate-2">@client.Company</td>
-          <td data-label="Address" class="text-truncate-2">@client.Address</td>
-          <td data-label="# Invoices">@(client.Invoices?.Count ?? 0)</td>
+        <table class="table table-hover bg-white shadow-sm rounded table-mobile" id="clientTable">
+            <thead class="table-light position-sticky top-0" style="z-index:1;">
+                <tr>
+                    <th class="sortable" onclick="sortTable(0)">Contact</th>
+                    <th class="sortable" onclick="sortTable(1)">Email</th>
+                    <th class="sortable" onclick="sortTable(2)">Company</th>
+                    <th class="sortable" onclick="sortTable(3)">Address</th>
+                    <th class="sortable" onclick="sortTable(4)"># Invoices</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in Model)
+                {
+                    <tr>
+                        <td data-label="Contact">@client.Name</td>
+                        <td data-label="Email" class="text-truncate-2">@client.Email</td>
+                        <td data-label="Company" class="text-truncate-2">@client.Company</td>
+                        <td data-label="Address" class="text-truncate-2">@client.Address</td>
+                        <td data-label="# Invoices">@(client.Invoices?.Count ?? 0)</td>
 
-          <td data-label="Actions" class="text-end cell-actions">
-            <div class="dropdown d-none d-sm-inline-block">
-              <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                <li>
-                  <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
-                    <i class="bi bi-eye me-2"></i>Details
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
-                    <i class="bi bi-pencil-square me-2"></i>Edit
-                  </a>
-                </li>
-                <li>
-                  <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Delete this client?');">
-                    @Html.AntiForgeryToken()
-                    <button class="dropdown-item text-danger" type="submit">
-                      <i class="bi bi-trash3 me-2"></i>Delete
-                    </button>
-                  </form>
-                </li>
-              </ul>
-            </div>
+                        <td data-label="Actions" class="text-end cell-actions">
+                            <!-- Desktop dropdown -->
+                            <div class="dropdown d-none d-sm-inline-block">
+                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
+                                            <i class="bi bi-eye me-2"></i>Details
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
+                                            <i class="bi bi-pencil-square me-2"></i>Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Delete this client?');">
+                                            @Html.AntiForgeryToken()
+                                            <button class="dropdown-item text-danger" type="submit">
+                                                <i class="bi bi-trash3 me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
 
-            <div class="d-inline d-sm-none">
-              <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@client.ClientId" title="Details">
-                <i class="bi bi-eye"></i>
-              </a>
-              <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@client.ClientId" title="Edit">
-                <i class="bi bi-pencil-square"></i>
-              </a>
-              <form method="post" action="/Clients/Delete/@client.ClientId" class="d-inline"
-                    onsubmit="return confirm('Delete this client?');">
-                @Html.AntiForgeryToken()
-                <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit">
-                  <i class="bi bi-trash3"></i>
-                </button>
-              </form>
-            </div>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+                            <!-- XS compact icon actions -->
+                            <div class="d-inline d-sm-none">
+                                <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@client.ClientId" title="Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@client.ClientId" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form method="post" action="/Clients/Delete/@client.ClientId" class="d-inline"
+                                      onsubmit="return confirm('Delete this client?');">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @section Scripts {
 <script>
-
 (function () {
   const search = document.getElementById('clientSearch');
   const table  = document.getElementById('clientTable');
   if (!search || !table) return;
 
   const tbody  = table.tBodies[0];
-
 
   const norm = s => (s || '')
       .toString()
