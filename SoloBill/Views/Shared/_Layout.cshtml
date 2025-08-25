@@ -29,20 +29,17 @@
         <img src="~/images/solobill-logo.png" alt="SoloBill Logo" style="height:40px" class="me-2" />
       </a>
 
-      <!-- SINGLE mobile toggle  -->
+      <!-- mobile toggle  -->
       <button class="navbar-toggler" type="button"
               data-bs-toggle="offcanvas" data-bs-target="#mobileNav"
               aria-controls="mobileNav" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- auth buttons visible on desktop only -->
       <div class="d-none d-lg-flex ms-auto align-items-center gap-3">
         @if (SignInManager.IsSignedIn(User))
         {
-          <a href="/Invoices/Create" class="btn btn-purple rounded-pill px-4 py-2">
-            <i class="bi bi-plus-lg me-1"></i> New invoice
-          </a>
+      
           <form method="post"
                 asp-area="Identity"
                 asp-page="/Account/Logout"
@@ -62,7 +59,7 @@
     </div>
   </nav>
 
-  <!-- Offcanvas: mobile navigation -->
+  <!-- mobile navigation -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="mobileNavLabel">SoloBill</h5>
@@ -122,7 +119,7 @@
   </div>
 </header>
 
-    <!-- Mobile offcanvas (shows the sidebar links on small screens) -->
+    <!-- Mobile offcanvas -->
     @if (User.Identity?.IsAuthenticated == true)
     {
         <div class="offcanvas offcanvas-start" tabindex="-1" id="sbOffcanvas" aria-labelledby="sbOffcanvasLabel">

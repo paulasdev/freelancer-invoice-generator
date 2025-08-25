@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <!-- Filters (search = live filter like Clients) -->
+    <!-- Filters -->
     <div class="card p-3 shadow-sm mb-3">
         <div class="row align-items-center g-2">
             <div class="col-md-4">
@@ -93,7 +93,7 @@
 
     <!-- Table -->
     <div class="table-responsive" style="max-height:60vh; overflow:auto;">
-        <table class="table table-hover bg-white rounded shadow-sm" id="invoiceTable">
+        <table class="table table-hover bg-white rounded shadow-sm table-mobile" id="invoiceTable">
             <thead class="table-light position-sticky top-0" style="z-index:1;">
                 <tr>
                     <th class="sortable" onclick="sortTable(0)">Status</th>
@@ -112,7 +112,7 @@
                     : (invoice.DueDate < DateTime.Now ? "Overdue" : "Draft");
 
                 <tr>
-                    <td data-status="@statusText">
+                    <td data-label="Status" data-status="@statusText">
                         @if (invoice.IsPaid)
                         {
                             <span class="badge bg-success">Paid</span>
@@ -126,13 +126,13 @@
                             <span class="badge bg-secondary">Draft</span>
                         }
                     </td>
-                    <td data-date="@invoice.IssueDate.ToString("yyyy-MM-dd")">
+                    <td data-label="Date" data-date="@invoice.IssueDate.ToString("yyyy-MM-dd")">
                         @invoice.IssueDate.ToString("dd MMM yyyy")
                     </td>
-                    <td data-number="@invoice.InvoiceId">#@invoice.InvoiceId</td>
-                    <td>@(invoice.CompanyName ?? invoice.Client?.Company)</td>
-                    <td data-total="@invoice.Amount">€@invoice.Amount.ToString("N2")</td>
-                    <td class="text-end">
+                    <td data-label="Number" data-number="@invoice.InvoiceId">#@invoice.InvoiceId</td>
+                    <td data-label="Customer" class="text-truncate-2">@(invoice.CompanyName ?? invoice.Client?.Company)</td>
+                    <td data-label="Total" data-total="@invoice.Amount">€@invoice.Amount.ToString("N2")</td>
+                    <td data-label="Actions" class="text-end">
                         <div class="dropdown">
                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical"></i>
@@ -168,7 +168,7 @@
 
 @section Scripts {
 <script>
-// --- Live search + filters + sorting (like Clients) ---
+/* unchanged filtering/sorting logic */
 (function () {
   const table  = document.getElementById('invoiceTable');
   const tbody  = table?.tBodies?.[0];
@@ -180,18 +180,13 @@
   const fromD   = document.getElementById('fromDate');
   const toD     = document.getElementById('toDate');
 
-  // Normalize (accent/case-insensitive)
-  const norm = s => (s || '')
-      .toString()
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .toLowerCase();
+  const norm = s => (s || '').toString().normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
 
   function inDateRange(isoDate) {
     if (!isoDate) return true;
     const d = new Date(isoDate + 'T00:00:00');
-    const f = fromD.value ? new Date(fromD.value + 'T00:00:00') : null;
-    const t = toD.value   ? new Date(toD.value   + 'T23:59:59') : null;
+    const f = fromD?.value ? new Date(fromD.value + 'T00:00:00') : null;
+    const t = toD?.value   ? new Date(toD.value   + 'T23:59:59') : null;
     if (f && d < f) return false;
     if (t && d > t) return false;
     return true;
@@ -205,7 +200,7 @@
     Array.from(tbody.rows).forEach(tr => {
       const textAll = norm(tr.innerText);
       const status  = norm(tr.querySelector('td[data-status]')?.dataset.status);
-      const cust    = norm(tr.cells[3]?.innerText);
+      const cust    = norm(tr.querySelector('td[data-label="Customer"]')?.innerText);
       const dateIso = tr.querySelector('td[data-date]')?.dataset.date;
 
       const okQ  = !q || textAll.includes(q);
@@ -225,7 +220,6 @@
     toD?.addEventListener(evt, filterRows);
   });
 
-  // Sorting
   let lastCol = -1, dir = 1;
   window.sortTable = function (colIndex) {
     dir = (colIndex === lastCol) ? -dir : 1;
@@ -233,20 +227,19 @@
 
     const rows = Array.from(tbody.rows).filter(tr => !tr.hidden);
     rows.sort((a, b) => {
- 
       let A, B;
 
-      if (colIndex === 1) { // Date
+      if (colIndex === 1) {
         A = new Date(a.querySelector('td[data-date]')?.dataset.date + 'T00:00:00').getTime() || 0;
         B = new Date(b.querySelector('td[data-date]')?.dataset.date + 'T00:00:00').getTime() || 0;
         return (A - B) * dir;
       }
-      if (colIndex === 2) { // Number (#ID)
+      if (colIndex === 2) {
         A = parseInt(a.querySelector('td[data-number]')?.dataset.number || '0', 10);
         B = parseInt(b.querySelector('td[data-number]')?.dataset.number || '0', 10);
         return (A - B) * dir;
       }
-      if (colIndex === 4) { // Total
+      if (colIndex === 4) {
         A = parseFloat(a.querySelector('td[data-total]')?.dataset.total || '0');
         B = parseFloat(b.querySelector('td[data-total]')?.dataset.total || '0');
         return (A - B) * dir;
@@ -258,7 +251,6 @@
 
     rows.forEach(r => tbody.appendChild(r));
   };
-
 
   filterRows();
 })();

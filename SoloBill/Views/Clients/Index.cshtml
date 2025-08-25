@@ -17,7 +17,7 @@
     </div>
 
     <div class="table-responsive" style="max-height:60vh; overflow:auto;">
-        <table class="table table-hover bg-white shadow-sm rounded" id="clientTable">
+        <table class="table table-hover bg-white shadow-sm rounded table-mobile" id="clientTable">
             <thead class="table-light position-sticky top-0" style="z-index:1;">
                 <tr>
                     <th class="sortable" onclick="sortTable(0)">ContactName</th>
@@ -32,38 +32,38 @@
                 @foreach (var client in Model)
                 {
                     <tr>
-                        <td>@client.Name</td>
-                        <td>@client.Email</td>
-                        <td>@client.Company</td>
-                        <td>@client.Address</td>
-                        <td>@(client.Invoices?.Count ?? 0)</td>
-                       <td class="text-end">
-    <div class="dropdown">
-        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-three-dots-vertical"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-            <li>
-                <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
-                    <i class="bi bi-eye me-2"></i>Details
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
-                    <i class="bi bi-pencil-square me-2"></i>Edit
-                </a>
-            </li>
-            <li>
-                <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Are you sure you want to delete this client?');">
-                    @Html.AntiForgeryToken()
-                    <button class="dropdown-item text-danger" type="submit">
-                        <i class="bi bi-trash3 me-2"></i>Delete
-                    </button>
-                </form>
-            </li>
-        </ul>
-    </div>
-</td>
+                        <td data-label="Contact">@client.Name</td>
+                        <td data-label="Email" class="text-truncate-2">@client.Email</td>
+                        <td data-label="Company" class="text-truncate-2">@client.Company</td>
+                        <td data-label="Address" class="text-truncate-2">@client.Address</td>
+                        <td data-label="# Invoices">@(client.Invoices?.Count ?? 0)</td>
+                        <td data-label="Actions" class="text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
+                                            <i class="bi bi-eye me-2"></i>Details
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
+                                            <i class="bi bi-pencil-square me-2"></i>Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Are you sure you want to delete this client?');">
+                                            @Html.AntiForgeryToken()
+                                            <button class="dropdown-item text-danger" type="submit">
+                                                <i class="bi bi-trash3 me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -73,14 +73,12 @@
 
 @section Scripts {
 <script>
-
 (function () {
   const search = document.getElementById('clientSearch');
   const table  = document.getElementById('clientTable');
   if (!search || !table) return;
 
   const tbody  = table.tBodies[0];
-
 
   const norm = s => (s || '')
       .toString()

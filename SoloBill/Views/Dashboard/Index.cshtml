@@ -1,5 +1,4 @@
 @model SoloBill.ViewModels.DashboardViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -44,7 +43,7 @@
     <!-- Recent Invoices -->
     <div class="card shadow-sm">
         <div class="table-responsive" style="max-height:50vh; overflow:auto;">
-            <table class="table table-hover mb-0">
+            <table class="table table-hover mb-0 table-mobile">
                 <thead class="table-light position-sticky top-0" style="z-index:1;">
                     <tr>
                         <th>Invoice No</th>
@@ -59,8 +58,8 @@
                         foreach (var invoice in Model.RecentInvoices)
                         {
                             <tr>
-                                <td>@invoice.InvoiceNumber</td>
-                                <td>
+                                <td data-label="Invoice No">@invoice.InvoiceNumber</td>
+                                <td data-label="Status">
                                     @if (invoice.Status?.ToLower() == "paid")
                                     {
                                         <span class="badge bg-success">Paid</span>
@@ -74,13 +73,14 @@
                                         <span class="badge bg-secondary">@invoice.Status</span>
                                     }
                                 </td>
-                                <td>@invoice.ClientName</td>
-                                <td>
+                                <td data-label="Client" class="text-truncate-2">@invoice.ClientName</td>
+                                <td data-label="Download" class="text-end">
                                     <a asp-action="ExportToPdf" 
                                        asp-controller="Invoices" 
                                        asp-route-id="@invoice.InvoiceId" 
-                                       class="btn btn-outline-primary btn-sm rounded-pill">
-                                        <i class="bi bi-download me-1"></i> Download PDF
+                                       class="btn btn-outline-primary btn-sm rounded-pill btn-icon">
+                                        <i class="bi bi-download"></i>
+                                        <span class="d-none d-sm-inline ms-1">Download PDF</span>
                                     </a>
                                 </td>
                             </tr>
