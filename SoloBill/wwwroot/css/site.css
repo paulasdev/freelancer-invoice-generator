@@ -1,10 +1,3 @@
-/* ================================
-   SoloBill Theme – site.css
-   Brand: Purple (#8a3ffc) / Teal (#00cfe8)
-   No red variants
-   ================================ */
-
-/* ---------- CSS Variables ---------- */
 :root {
   /* Brand */
   --brand-primary: #8a3ffc;
@@ -272,7 +265,7 @@ a.navbar-brand {
 
 /* Solid brand purple (success/ok) */
 .alert-sb-primary {
-  background-color: #8a3ffc; /* brand */
+  background-color: #8a3ffc;
   color: #fff;
   box-shadow: 0 6px 18px rgba(138, 63, 252, 0.25);
 }
@@ -281,7 +274,7 @@ a.navbar-brand {
   opacity: 0.9;
 }
 
-/* Soft warning (amber) – no red */
+/* Soft warning */
 .alert-sb-warning {
   background: #fff6e6;
   color: #7a5a00;
@@ -295,7 +288,7 @@ a.navbar-brand {
   box-shadow: 0 6px 18px rgba(0, 207, 232, 0.18);
 }
 
-/* Soft error without red (deep purple outline vibe) */
+/* Soft error  */
 .alert-sb-error {
   background: #f4efff;
   color: #3a2a6a;
@@ -307,7 +300,7 @@ a.navbar-brand {
   margin-bottom: 0.75rem;
 }
 
-/* ---------- Sidebar (authenticated pages) ---------- */
+/* ---------- Sidebar ---------- */
 .sidebar {
   background: linear-gradient(
     180deg,
@@ -483,4 +476,76 @@ aside {
   padding: 0.35rem 0.55rem;
   border-radius: 0.5rem;
   line-height: 1;
+}
+
+@media (min-width: 992px) {
+  .table-desktop {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-desktop th,
+  .table-desktop td {
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 56px;
+  }
+
+  .sticky-head thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+    box-shadow: 0 1px 0 var(--bs-border-color);
+  }
+
+  .col-invno {
+    width: 11rem;
+  }
+  .col-status {
+    width: 9rem;
+  }
+  .col-date {
+    width: 12rem;
+  }
+  .col-number {
+    width: 9rem;
+  }
+  .col-customer,
+  .col-client,
+  .col-company {
+    width: auto;
+  }
+  .col-total {
+    width: 12rem;
+    text-align: right;
+  }
+  .col-count {
+    width: 8rem;
+    text-align: center;
+  }
+  .col-actions {
+    width: 7rem;
+    text-align: right;
+  }
+
+  .table-desktop .btn-icon {
+    padding: 0.35rem 0.55rem;
+    border-radius: 0.5rem;
+    line-height: 1;
+  }
+}
+
+#clientTable.table-desktop td,
+#clientTable.table-desktop th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+#clientTable.table-desktop td {
+  vertical-align: middle;
+  height: 56px;
 }
