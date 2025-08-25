@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <!-- Filters (search = live filter like Clients) -->
+    <!-- Filters -->
     <div class="card p-3 shadow-sm mb-3">
         <div class="row align-items-center g-2">
             <div class="col-md-4">
@@ -93,7 +93,7 @@
 
     <!-- Table -->
     <div class="table-responsive" style="max-height:60vh; overflow:auto;">
-        <table class="table table-hover bg-white rounded shadow-sm" id="invoiceTable">
+        <table class="table table-hover bg-white rounded shadow-sm table-mobile" id="invoiceTable">
             <thead class="table-light position-sticky top-0" style="z-index:1;">
                 <tr>
                     <th class="sortable" onclick="sortTable(0)">Status</th>
@@ -101,7 +101,7 @@
                     <th class="sortable" onclick="sortTable(2)">Number</th>
                     <th class="sortable" onclick="sortTable(3)">Customer</th>
                     <th class="sortable" onclick="sortTable(4)">Total</th>
-                    <th></th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,7 +112,7 @@
                     : (invoice.DueDate < DateTime.Now ? "Overdue" : "Draft");
 
                 <tr>
-                    <td data-status="@statusText">
+                    <td data-label="Status" data-status="@statusText">
                         @if (invoice.IsPaid)
                         {
                             <span class="badge bg-success">Paid</span>
@@ -126,14 +126,22 @@
                             <span class="badge bg-secondary">Draft</span>
                         }
                     </td>
-                    <td data-date="@invoice.IssueDate.ToString("yyyy-MM-dd")">
+
+                    <td data-label="Date" data-date="@invoice.IssueDate.ToString("yyyy-MM-dd")">
                         @invoice.IssueDate.ToString("dd MMM yyyy")
                     </td>
-                    <td data-number="@invoice.InvoiceId">#@invoice.InvoiceId</td>
-                    <td>@(invoice.CompanyName ?? invoice.Client?.Company)</td>
-                    <td data-total="@invoice.Amount">€@invoice.Amount.ToString("N2")</td>
-                    <td class="text-end">
-                        <div class="dropdown">
+
+                    <td data-label="Number" data-number="@invoice.InvoiceId">#@invoice.InvoiceId</td>
+
+                    <td data-label="Customer" class="text-truncate-2">
+                        @(invoice.CompanyName ?? invoice.Client?.Company)
+                    </td>
+
+                    <td data-label="Total" data-total="@invoice.Amount">€@invoice.Amount.ToString("N2")</td>
+
+                    <td data-label="Actions" class="text-end cell-actions">
+                        <!-- Desktop dropdown -->
+                        <div class="dropdown d-none d-sm-inline-block">
                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical"></i>
                             </button>
@@ -158,6 +166,23 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <!-- XS compact icon actions -->
+                        <div class="d-inline d-sm-none">
+                            <a class="btn btn-outline-primary btn-icon" href="/Invoices/Details/@invoice.InvoiceId" title="Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a class="btn btn-outline-secondary btn-icon" href="/Invoices/Edit/@invoice.InvoiceId" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <form method="post" action="/Invoices/Delete/@invoice.InvoiceId" class="d-inline"
+                                  onsubmit="return confirm('Are you sure you want to delete this invoice?');">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }
@@ -168,7 +193,7 @@
 
 @section Scripts {
 <script>
-// --- Live search + filters + sorting (like Clients) ---
+// --- Live search + filters + sorting ---
 (function () {
   const table  = document.getElementById('invoiceTable');
   const tbody  = table?.tBodies?.[0];
@@ -180,7 +205,6 @@
   const fromD   = document.getElementById('fromDate');
   const toD     = document.getElementById('toDate');
 
-  // Normalize (accent/case-insensitive)
   const norm = s => (s || '')
       .toString()
       .normalize('NFD')
@@ -205,7 +229,7 @@
     Array.from(tbody.rows).forEach(tr => {
       const textAll = norm(tr.innerText);
       const status  = norm(tr.querySelector('td[data-status]')?.dataset.status);
-      const cust    = norm(tr.cells[3]?.innerText);
+      const cust    = norm(tr.querySelector('td[data-label="Customer"]')?.innerText);
       const dateIso = tr.querySelector('td[data-date]')?.dataset.date;
 
       const okQ  = !q || textAll.includes(q);
@@ -225,7 +249,6 @@
     toD?.addEventListener(evt, filterRows);
   });
 
-  // Sorting
   let lastCol = -1, dir = 1;
   window.sortTable = function (colIndex) {
     dir = (colIndex === lastCol) ? -dir : 1;
@@ -233,7 +256,6 @@
 
     const rows = Array.from(tbody.rows).filter(tr => !tr.hidden);
     rows.sort((a, b) => {
- 
       let A, B;
 
       if (colIndex === 1) { // Date
@@ -241,7 +263,7 @@
         B = new Date(b.querySelector('td[data-date]')?.dataset.date + 'T00:00:00').getTime() || 0;
         return (A - B) * dir;
       }
-      if (colIndex === 2) { // Number (#ID)
+      if (colIndex === 2) { // Number
         A = parseInt(a.querySelector('td[data-number]')?.dataset.number || '0', 10);
         B = parseInt(b.querySelector('td[data-number]')?.dataset.number || '0', 10);
         return (A - B) * dir;
@@ -258,7 +280,6 @@
 
     rows.forEach(r => tbody.appendChild(r));
   };
-
 
   filterRows();
 })();
