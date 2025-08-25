@@ -92,18 +92,26 @@
     </div>
 
     <!-- Table -->
-    <div class="table-responsive" style="max-height:60vh; overflow:auto;">
-        <table class="table table-hover bg-white rounded shadow-sm table-mobile table-desktop" id="invoiceTable">
-            <thead class="table-light position-sticky top-0" style="z-index:1;">
-                <tr>
-                    <th class="sortable" onclick="sortTable(0)">Status</th>
-                    <th class="sortable" onclick="sortTable(1)">Date</th>
-                    <th class="sortable" onclick="sortTable(2)">Number</th>
-                    <th class="sortable" onclick="sortTable(3)">Customer</th>
-                    <th class="sortable" onclick="sortTable(4)">Total</th>
-                    <th class="text-end col-w-120">Actions</th>
-                </tr>
-            </thead>
+<div class="table-responsive" style="max-height:60vh; overflow:auto;">
+  <table class="table table-hover bg-white rounded shadow-sm table-desktop sticky-head table-mobile" id="invoiceTable">
+    <colgroup>
+      <col class="col-status" />
+      <col class="col-date" />
+      <col class="col-number" />
+      <col class="col-customer" />
+      <col class="col-total" />
+      <col class="col-actions" />
+    </colgroup>
+    <thead class="table-light">
+      <tr>
+        <th class="sortable" onclick="sortTable(0)">Status</th>
+        <th class="sortable" onclick="sortTable(1)">Date</th>
+        <th class="sortable" onclick="sortTable(2)">Number</th>
+        <th class="sortable" onclick="sortTable(3)">Customer</th>
+        <th class="sortable text-end" onclick="sortTable(4)">Total</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
             <tbody>
             @foreach (var invoice in Model)
             {
@@ -167,7 +175,6 @@
                             </ul>
                         </div>
 
-                        <!-- XS compact icon actions -->
                         <div class="d-inline d-sm-none">
                             <a class="btn btn-outline-primary btn-icon" href="/Invoices/Details/@invoice.InvoiceId" title="Details">
                                 <i class="bi bi-eye"></i>
