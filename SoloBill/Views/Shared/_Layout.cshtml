@@ -22,59 +22,105 @@
 </head>
 <body>
     <!-- Top Navbar -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="/">
-                    <img src="~/images/solobill-logo.png" alt="SoloBill Logo" style="height: 40px;" class="me-2" />
-                </a>
+   <header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="~/images/solobill-logo.png" alt="SoloBill Logo" style="height:40px" class="me-2" />
+      </a>
 
-                <!-- Mobile toggles -->
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <!-- Button to open offcanvas (mobile sidebar) -->
-                    <button class="btn d-lg-none me-2" type="button"
-                            data-bs-toggle="offcanvas" data-bs-target="#sbOffcanvas"
-                            aria-controls="sbOffcanvas" aria-label="Open menu">
-                        <i class="bi bi-list fs-3"></i>
-                    </button>
-                }
+      <!-- SINGLE mobile toggle  -->
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#mobileNav"
+              aria-controls="mobileNav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-                <!-- Standard navbar collapse (holds auth buttons) -->
-                <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+      <!-- auth buttons visible on desktop only -->
+      <div class="d-none d-lg-flex ms-auto align-items-center gap-3">
+        @if (SignInManager.IsSignedIn(User))
+        {
+          <a href="/Invoices/Create" class="btn btn-purple rounded-pill px-4 py-2">
+            <i class="bi bi-plus-lg me-1"></i> New invoice
+          </a>
+          <form method="post"
+                asp-area="Identity"
+                asp-page="/Account/Logout"
+                asp-route-returnUrl="@Url.Action("Index","Home", new { area = "" })"
+                class="d-inline">
+            <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+              Log out
+            </button>
+          </form>
+        }
+        else
+        {
+          <a href="/Identity/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2">Sign In</a>
+          <a href="/Identity/Account/Register" class="btn btn-primary rounded-pill px-4 py-2">Register</a>
+        }
+      </div>
+    </div>
+  </nav>
 
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <div class="d-flex align-items-center gap-3 py-3 py-lg-0">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <form method="post"
-                                  asp-area="Identity"
-                                  asp-page="/Account/Logout"
-                                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
-                                  class="d-inline">
-                                <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 py-2">
-                                    Log out
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <a href="/Identity/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2">
-                                Sign In
-                            </a>
-                            <a href="/Identity/Account/Register" class="btn btn-primary rounded-pill px-4 py-2">
-                                Register
-                            </a>
-                        }
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+  <!-- Offcanvas: mobile navigation -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="mobileNavLabel">SoloBill</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+      @* Signed-in menu *@
+      @if (SignInManager.IsSignedIn(User))
+      {
+        <div class="d-grid gap-2 mb-3">
+          <a href="/Invoices/Create" class="btn btn-purple rounded-pill">
+            <i class="bi bi-plus-lg me-1"></i> New invoice
+          </a>
+        </div>
+
+        <div class="list-group list-group-flush mb-3">
+          <a class="list-group-item list-group-item-action py-3" href="/Dashboard">
+            <i class="bi bi-grid me-2"></i> Dashboard
+          </a>
+          <a class="list-group-item list-group-item-action py-3" href="/Invoices">
+            <i class="bi bi-file-earmark-text me-2"></i> Invoices
+          </a>
+          <a class="list-group-item list-group-item-action py-3" href="/Clients">
+            <i class="bi bi-people me-2"></i> Clients
+          </a>
+          <a class="list-group-item list-group-item-action py-3" href="/ApplicationUser/Settings">
+            <i class="bi bi-gear me-2"></i> Settings
+          </a>
+        </div>
+
+        <div class="mt-auto">
+          <form method="post"
+                asp-area="Identity"
+                asp-page="/Account/Logout"
+                asp-route-returnUrl="@Url.Action("Index","Home", new { area = "" })">
+            <button type="submit" class="btn w-100 btn-outline-secondary rounded-pill py-2">
+              <i class="bi bi-box-arrow-right me-1"></i> Log out
+            </button>
+          </form>
+        </div>
+      }
+      else
+      {
+        @* Anonymous menu *@
+        <div class="list-group list-group-flush mb-3">
+          <a class="list-group-item list-group-item-action py-3" href="/">
+            <i class="bi bi-house me-2"></i> Home
+          </a>
+        </div>
+        <div class="d-grid gap-2 mt-auto">
+          <a href="/Identity/Account/Login" class="btn btn-outline-primary rounded-pill">Sign In</a>
+          <a href="/Identity/Account/Register" class="btn btn-primary rounded-pill">Register</a>
+        </div>
+      }
+    </div>
+  </div>
+</header>
 
     <!-- Mobile offcanvas (shows the sidebar links on small screens) -->
     @if (User.Identity?.IsAuthenticated == true)
