@@ -20,12 +20,12 @@
 <div class="table-responsive" style="max-height:60vh; overflow:auto;">
   <table class="table table-hover bg-white shadow-sm rounded table-desktop sticky-head table-mobile" id="clientTable">
     <colgroup>
-      <col style="width: 18%;" /> <!-- Contact -->
-      <col style="width: 22%;" /> <!-- Email -->
-      <col style="width: 18%;" /> <!-- Company -->
-      <col style="width: 22%;" /> <!-- Address -->
-      <col style="width: 8%;"  /> <!-- #Invoices -->
-      <col style="width: 12%;" /> <!-- Actions -->
+      <col style="width: 18%;"/><!-- Contact -->
+      <col style="width: 22%;"/><!-- Email -->
+      <col style="width: 18%;"/><!-- Company -->
+      <col style="width: 22%;"/><!-- Address -->
+      <col style="width: 8%;"/><!-- # Invoices -->
+      <col style="width: 12%;"/><!-- Actions -->
     </colgroup>
     <thead class="table-light">
       <tr>
@@ -37,67 +37,51 @@
         <th class="text-end">Actions</th>
       </tr>
     </thead>
+
     <tbody>
-            <tbody>
-                @foreach (var client in Model)
-                {
-                    <tr>
-                        <td data-label="Contact">@client.Name</td>
-                        <td data-label="Email" class="text-truncate-2">@client.Email</td>
-                        <td data-label="Company" class="text-truncate-2">@client.Company</td>
-                        <td data-label="Address" class="text-truncate-2">@client.Address</td>
-                        <td data-label="# Invoices">@(client.Invoices?.Count ?? 0)</td>
+      @foreach (var client in Model)
+      {
+        <tr class="row-hover">
+          <td data-label="Contact" class="text-trunc-one">@client.Name</td>
+          <td data-label="Email"   class="text-trunc-one">@client.Email</td>
+          <td data-label="Company" class="text-trunc-one">@client.Company</td>
+          <td data-label="Address" class="text-trunc-one">@client.Address</td>
+          <td data-label="# Invoices" class="text-center">@(client.Invoices?.Count ?? 0)</td>
 
-                        <td data-label="Actions" class="text-end cell-actions">
-                            <!-- Desktop dropdown -->
-                            <div class="dropdown d-none d-sm-inline-block">
-                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li>
-                                        <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
-                                            <i class="bi bi-eye me-2"></i>Details
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
-                                            <i class="bi bi-pencil-square me-2"></i>Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Delete this client?');">
-                                            @Html.AntiForgeryToken()
-                                            <button class="dropdown-item text-danger" type="submit">
-                                                <i class="bi bi-trash3 me-2"></i>Delete
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
+          <td data-label="Actions" class="text-end cell-actions">
+            <!-- Desktop dropdown -->
+            <div class="dropdown d-none d-lg-inline-block position-static" data-bs-display="static">
+              <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li><a class="dropdown-item" href="/Clients/Details/@client.ClientId"><i class="bi bi-eye me-2"></i>Details</a></li>
+                <li><a class="dropdown-item" href="/Clients/Edit/@client.ClientId"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
+                <li>
+                  <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Delete this client?');">
+                    @Html.AntiForgeryToken()
+                    <button class="dropdown-item text-danger" type="submit"><i class="bi bi-trash3 me-2"></i>Delete</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
 
-                            <!-- XS compact icon actions -->
-                            <div class="d-inline d-sm-none">
-                                <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@client.ClientId" title="Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@client.ClientId" title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form method="post" action="/Clients/Delete/@client.ClientId" class="d-inline"
-                                      onsubmit="return confirm('Delete this client?');">
-                                    @Html.AntiForgeryToken()
-                                    <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            <!-- XS compact actions -->
+            <div class="d-inline d-lg-none">
+              <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@client.ClientId" title="Details"><i class="bi bi-eye"></i></a>
+              <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@client.ClientId" title="Edit"><i class="bi bi-pencil-square"></i></a>
+              <form method="post" action="/Clients/Delete/@client.ClientId" class="d-inline"
+                    onsubmit="return confirm('Delete this client?');">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit"><i class="bi bi-trash3"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
 </div>
 
 @section Scripts {

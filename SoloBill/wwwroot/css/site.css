@@ -478,6 +478,41 @@ aside {
   line-height: 1;
 }
 
+.table-mobile thead {
+  display: none;
+}
+.table-mobile tbody tr {
+  display: block;
+  margin: 0 0 1rem;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  background: #fff;
+}
+.table-mobile tbody tr td {
+  display: grid;
+  grid-template-columns: 42% 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem !important;
+  border: 0 !important;
+  vertical-align: middle;
+}
+.table-mobile tbody tr td::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: #555;
+}
+.table-mobile .cell-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  grid-template-columns: 1fr !important;
+}
+.table-mobile .badge {
+  justify-self: start;
+}
+
 @media (min-width: 992px) {
   .table-desktop {
     table-layout: fixed;
@@ -501,6 +536,7 @@ aside {
     box-shadow: 0 1px 0 var(--bs-border-color);
   }
 
+  /* column presets */
   .col-invno {
     width: 11rem;
   }
@@ -531,21 +567,35 @@ aside {
     text-align: right;
   }
 
+  .table-desktop td.cell-actions {
+    overflow: visible;
+  }
   .table-desktop .btn-icon {
     padding: 0.35rem 0.55rem;
     border-radius: 0.5rem;
     line-height: 1;
   }
+
+  .table-desktop tbody tr.row-hover:hover {
+    background: #fafafa;
+  }
 }
 
-#clientTable.table-desktop td,
-#clientTable.table-desktop th {
+.text-trunc-one {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 240px;
 }
-#clientTable.table-desktop td {
-  vertical-align: middle;
-  height: 56px;
+
+.sb-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: rgba(138, 63, 252, 0.1);
+  color: #6f2ddc;
+  flex: 0 0 36px;
 }
