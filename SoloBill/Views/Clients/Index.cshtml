@@ -12,61 +12,84 @@
     </div>
 
     <div class="input-group mb-3">
-        <input type="text" id="clientSearch" class="form-control" placeholder="Search clients..." />
+        <input type="text" id="clientSearch" class="form-control" placeholder="Search clients…" />
         <span class="input-group-text"><i class="fas fa-search"></i></span>
     </div>
 
+    <div class="table-responsive" style="max-height:60vh; overflow:auto;">
+        <table class="table table-hover bg-white shadow-sm rounded table-desktop sticky-head table-mobile" id="clientTable">
+            <colgroup>
+                <col style="width: 30%;" />  @* Contact (avatar + name + company small) *@
+                <col style="width: 22%;" />  @* Email *@
+                <col style="width: 28%;" />  @* Address *@
+                <col style="width: 8%;"  />  @* # Invoices *@
+                <col style="width: 12%;" />  @* Actions *@
+            </colgroup>
 
-<div class="table-responsive" style="max-height:60vh; overflow:auto;">
-  <table class="table table-hover bg-white shadow-sm rounded table-desktop sticky-head table-mobile" id="clientTable">
-    <colgroup>
-      <col style="width: 18%;" /> <!-- Contact -->
-      <col style="width: 22%;" /> <!-- Email -->
-      <col style="width: 18%;" /> <!-- Company -->
-      <col style="width: 22%;" /> <!-- Address -->
-      <col style="width: 8%;"  /> <!-- #Invoices -->
-      <col style="width: 12%;" /> <!-- Actions -->
-    </colgroup>
-    <thead class="table-light">
-      <tr>
-        <th class="sortable" onclick="sortTable(0)">Contact</th>
-        <th class="sortable" onclick="sortTable(1)">Email</th>
-        <th class="sortable" onclick="sortTable(2)">Company</th>
-        <th class="sortable" onclick="sortTable(3)">Address</th>
-        <th class="sortable text-center" onclick="sortTable(4)"># Invoices</th>
-        <th class="text-end">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
+            <thead class="table-light">
+                <tr>
+                    <th class="col-client">Client</th>
+                    <th class="col-email">Email</th>
+                    <th class="col-address">Address</th>
+                    <th class="text-center col-count">#</th>
+                    <th class="text-end col-actions">Actions</th>
+                </tr>
+            </thead>
+
             <tbody>
-                @foreach (var client in Model)
+                @foreach (var c in Model)
                 {
-                    <tr>
-                        <td data-label="Contact">@client.Name</td>
-                        <td data-label="Email" class="text-truncate-2">@client.Email</td>
-                        <td data-label="Company" class="text-truncate-2">@client.Company</td>
-                        <td data-label="Address" class="text-truncate-2">@client.Address</td>
-                        <td data-label="# Invoices">@(client.Invoices?.Count ?? 0)</td>
+                    var count = c.Invoices?.Count ?? 0;
+                    <tr class="row-hover">
+                        <!-- Client (avatar + name + company sublabel) -->
+                        <td data-label="Client">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="sb-avatar" aria-hidden="true">
+                                    @((!string.IsNullOrWhiteSpace(c.Name) ? c.Name[0] : '?').ToString().ToUpper())
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="fw-semibold text-trunc-one" title="@c.Name">@c.Name</div>
+                                    <div class="text-muted small text-trunc-one" title="@c.Company">@c.Company</div>
+                                </div>
+                            </div>
+                        </td>
 
+                        <!-- Email -->
+                        <td data-label="Email" class="text-trunc-one" title="@c.Email">
+                            @c.Email
+                        </td>
+
+                        <!-- Address -->
+                        <td data-label="Address" class="text-trunc-one" title="@c.Address">
+                            @c.Address
+                        </td>
+
+                        <!-- # Invoices -->
+                        <td data-label="#" class="text-center">
+                            <span class="badge rounded-pill bg-light text-dark border fw-semibold px-3"
+                                  title="Invoices">@count</span>
+                        </td>
+
+                        <!-- Actions -->
                         <td data-label="Actions" class="text-end cell-actions">
-                            <!-- Desktop dropdown -->
                             <div class="dropdown d-none d-sm-inline-block">
                                 <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                                     <li>
-                                        <a class="dropdown-item" href="/Clients/Details/@client.ClientId">
+                                        <a class="dropdown-item" href="/Clients/Details/@c.ClientId">
                                             <i class="bi bi-eye me-2"></i>Details
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/Clients/Edit/@client.ClientId">
+                                        <a class="dropdown-item" href="/Clients/Edit/@c.ClientId">
                                             <i class="bi bi-pencil-square me-2"></i>Edit
                                         </a>
                                     </li>
                                     <li>
-                                        <form method="post" action="/Clients/Delete/@client.ClientId" onsubmit="return confirm('Delete this client?');">
+                                        <form method="post" action="/Clients/Delete/@c.ClientId"
+                                              onsubmit="return confirm('Delete this client?');">
                                             @Html.AntiForgeryToken()
                                             <button class="dropdown-item text-danger" type="submit">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
@@ -76,15 +99,15 @@
                                 </ul>
                             </div>
 
-                            <!-- XS compact icon actions -->
+                            <!-- XS compact icons (mobile) -->
                             <div class="d-inline d-sm-none">
-                                <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@client.ClientId" title="Details">
+                                <a class="btn btn-outline-primary btn-icon" href="/Clients/Details/@c.ClientId" title="Details">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@client.ClientId" title="Edit">
+                                <a class="btn btn-outline-secondary btn-icon" href="/Clients/Edit/@c.ClientId" title="Edit">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <form method="post" action="/Clients/Delete/@client.ClientId" class="d-inline"
+                                <form method="post" action="/Clients/Delete/@c.ClientId" class="d-inline"
                                       onsubmit="return confirm('Delete this client?');">
                                     @Html.AntiForgeryToken()
                                     <button class="btn btn-outline-secondary btn-icon" title="Delete" type="submit">
@@ -107,13 +130,8 @@
   const table  = document.getElementById('clientTable');
   if (!search || !table) return;
 
-  const tbody  = table.tBodies[0];
-
-  const norm = s => (s || '')
-      .toString()
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .toLowerCase();
+  const tbody = table.tBodies[0];
+  const norm = s => (s || '').toString().normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
 
   function filterRows() {
     const q = norm(search.value);
@@ -122,7 +140,6 @@
       tr.hidden = q && !text.includes(q);
     });
   }
-
   search.addEventListener('input', filterRows);
 
   let lastCol = -1, dir = 1;
@@ -134,10 +151,10 @@
     rows.sort((a, b) => {
       let A = a.cells[colIndex]?.innerText.trim() ?? '';
       let B = b.cells[colIndex]?.innerText.trim() ?? '';
-      if (colIndex === 4) {
-        return ((parseInt(A, 10) || 0) - (parseInt(B, 10) || 0)) * dir;
+      if (colIndex === 3) { // count column when header shows 0..n
+        return ((parseInt(A,10)||0) - (parseInt(B,10)||0)) * dir;
       }
-      return A.localeCompare(B, undefined, { sensitivity: 'base' }) * dir;
+      return A.localeCompare(B, undefined, {sensitivity:'base'}) * dir;
     });
     rows.forEach(r => tbody.appendChild(r));
   };
