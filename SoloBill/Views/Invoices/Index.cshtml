@@ -193,7 +193,6 @@
 
 @section Scripts {
 <script>
-// --- Live search + filters + sorting ---
 (function () {
   const table  = document.getElementById('invoiceTable');
   const tbody  = table?.tBodies?.[0];
@@ -214,8 +213,8 @@
   function inDateRange(isoDate) {
     if (!isoDate) return true;
     const d = new Date(isoDate + 'T00:00:00');
-    const f = fromD.value ? new Date(fromD.value + 'T00:00:00') : null;
-    const t = toD.value   ? new Date(toD.value   + 'T23:59:59') : null;
+    const f = fromD?.value ? new Date(fromD.value + 'T00:00:00') : null;
+    const t = toD?.value   ? new Date(toD.value   + 'T23:59:59') : null;
     if (f && d < f) return false;
     if (t && d > t) return false;
     return true;
