@@ -75,18 +75,13 @@
                                 </td>
                                 <td data-label="Client" class="text-truncate-2">@invoice.ClientName</td>
                                 <td data-label="Download" class="cell-actions text-center">
-                                <a asp-action="ExportToPdf" asp-controller="Invoices" asp-route-id="@invoice.InvoiceId"
-                                    class="btn btn-outline-primary btn-sm d-flex justify-content-center align-items-center gap-2 w-100"
-                                      style="max-width: 160px;">
-                                    <i class="bi bi-download"></i>
-        <span class="d-none d-sm-inline">Download PDF</span>
-    </a>
-    
-         <!-- Mobile: icon-only -->
-        <a asp-action="ExportToPdf" asp-controller="Invoices" asp-route-id="@invoice.InvoiceId"
-       class="btn btn-outline-primary btn-icon d-inline-flex d-sm-none" title="Download PDF">
-        <i class="bi bi-download"></i>
-    </a>
+       <a asp-action="ExportToPdf"
+   asp-controller="Invoices"
+   asp-route-id="@invoice.InvoiceId"
+   class="btn btn-outline-primary btn-icon">
+   <i class="bi bi-download"></i>
+   <span class="d-none d-sm-inline"> Download PDF</span>
+</a>
 </td>
                             </tr>
                         }
