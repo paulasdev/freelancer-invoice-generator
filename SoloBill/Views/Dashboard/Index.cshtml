@@ -81,6 +81,12 @@
                                     <i class="bi bi-download"></i>
         <span class="d-none d-sm-inline">Download PDF</span>
     </a>
+    
+         <!-- Mobile: icon-only -->
+        <a asp-action="ExportToPdf" asp-controller="Invoices" asp-route-id="@invoice.InvoiceId"
+       class="btn btn-outline-primary btn-icon d-inline-flex d-sm-none" title="Download PDF">
+        <i class="bi bi-download"></i>
+    </a>
 </td>
                             </tr>
                         }
